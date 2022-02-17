@@ -30,6 +30,8 @@ class Stackr extends Plugin
      */
     public $schema;
 
+    public $hasCpSection = true;
+
     public function init()
     {
         parent::init();

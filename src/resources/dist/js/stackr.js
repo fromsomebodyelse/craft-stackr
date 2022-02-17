@@ -101,7 +101,7 @@ var ComponentThumb = function ComponentThumb() {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
     className: "border border-gray-400 rounded-md overflow-hidden",
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-      className: "w-full aspect-square bg-white text-gray-400",
+      className: "w-full px-2 py-2 aspect-square bg-white text-gray-400",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
         className: "h-auto w-full",
         fill: "none",
@@ -121,11 +121,8 @@ var ComponentThumb = function ComponentThumb() {
 var ComponentDetails = function ComponentDetails(_ref4) {
   var instance = _ref4.instance;
 
-  var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_StackrPage__WEBPACK_IMPORTED_MODULE_2__.StackrPageContext),
-      actions = _useContext.actions;
-
-  var _useContext2 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_main__WEBPACK_IMPORTED_MODULE_3__.InspectorContext),
-      setCurInstance = _useContext2.setCurInstance;
+  var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_main__WEBPACK_IMPORTED_MODULE_3__.InspectorContext),
+      setCurInstance = _useContext.setCurInstance;
 
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
       _useState2 = _slicedToArray(_useState, 2),
@@ -240,6 +237,7 @@ __webpack_require__.r(__webpack_exports__);
 var ComponentsList = function ComponentsList() {
   var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_StackrPage__WEBPACK_IMPORTED_MODULE_1__.StackrPageContext),
       instances = _useContext.instances,
+      mouseOver = _useContext.mouseOver,
       actions = _useContext.actions;
 
   var _useContext2 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_main__WEBPACK_IMPORTED_MODULE_2__.InspectorContext),
@@ -277,8 +275,9 @@ var ComponentsList = function ComponentsList() {
         className: "flex flex-col gap-y-2 mb-16 px-6",
         children: instances.map(function (instance) {
           var depthClassName = ['ml-0', 'ml-4', 'ml-8', 'ml-12'][instance.depth];
+          var bgColor = mouseOver.includes(instance.id) ? 'bg-blue-300' : 'bg-gray-300';
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-            className: "flex justify-between items-center px-4 py-2 bg-gray-300 cursor-pointer ".concat(depthClassName, " shadow-sm rounded-sm hover:bg-blue-300"),
+            className: "flex justify-between items-center px-4 py-2 ".concat(bgColor, " cursor-pointer ").concat(depthClassName, " shadow-sm rounded-sm hover:bg-blue-300"),
             onMouseOver: function onMouseOver(e) {
               return handleMouseOver(instance);
             },
@@ -450,6 +449,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _dispatcher__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dispatcher */ "./src/resources/js/dispatcher.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -473,7 +480,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var defaultPageData = {
   url: null,
-  instances: []
+  instances: [],
+  mouseOver: []
 };
 var StackrPageContext = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createContext();
 
@@ -485,28 +493,52 @@ var StackrPageContextProvider = function StackrPageContextProvider(_ref) {
       pageData = _useState2[0],
       setPageData = _useState2[1];
 
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((0,_dispatcher__WEBPACK_IMPORTED_MODULE_1__.eventDispatcher)("stackr-preview")),
-      _useState4 = _slicedToArray(_useState3, 1),
-      dispatcher = _useState4[0];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      mouseOver = _useState4[0],
+      setMouseOver = _useState4[1];
+
+  var dispatcher = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
 
   var state = _objectSpread(_objectSpread({}, pageData), {}, {
+    mouseOver: mouseOver,
     actions: {
       highlightInstance: function highlightInstance(id) {
         var highlight = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-        var iframe = document.querySelector('iframe#stackr-page').contentWindow;
-        dispatcher.dispatch(iframe, 'STACKR_HIGHLIGHT_INSTANCE', {
-          id: id,
-          highlight: highlight
-        });
+
+        if (dispatcher.current) {
+          dispatcher.current.dispatch('STACKR_HIGHLIGHT_INSTANCE', {
+            id: id,
+            highlight: highlight
+          });
+        }
       }
     }
   });
 
+  var onMouseOutInstance = function onMouseOutInstance(instance) {
+    setMouseOver(mouseOver.filter(function (item) {
+      return item.id !== instance.id;
+    }));
+  };
+
+  var onMouseOverInstance = function onMouseOverInstance(instance) {
+    setMouseOver([].concat(_toConsumableArray(mouseOver), [instance]));
+  };
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    // The host page will dispatch an event containing the pages's
+    var iframe = document.querySelector('iframe#stackr-page').contentWindow; // The host page will dispatch an event containing the pages's
     // component tree.
-    dispatcher.on('STACKR_INIT_PAGE', function (data) {
+
+    dispatcher.current = (0,_dispatcher__WEBPACK_IMPORTED_MODULE_1__.eventDispatcher)(iframe, 'stackr-preview');
+    dispatcher.current.on('STACKR_INIT_PAGE', function (data) {
       return setPageData(data);
+    });
+    dispatcher.current.on('STACKR_INSTANCE_MOUSE_OVER', function (data) {
+      return onMouseOverInstance(data);
+    });
+    dispatcher.current.on('STACKR_INSTANCE_MOUSE_OUT', function (data) {
+      return onMouseOutInstance(data);
     });
   }, []);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(StackrPageContext.Provider, {
@@ -545,7 +577,7 @@ __webpack_require__.r(__webpack_exports__);
  * API for dispatching events between windows that have the `window.x`
  * library loaded.
  */
-var eventDispatcher = function eventDispatcher(streamId) {
+var eventDispatcher = function eventDispatcher(target, streamId) {
   var handlers = {}; // Listen for messages being sent to the current window. Received
   // messages are only delegated to their handler if the handler exists
   // and the "key" matches the streamID of the dispatcher. This helps
@@ -572,8 +604,8 @@ var eventDispatcher = function eventDispatcher(streamId) {
     /**
      * Dispatch a message to any regsitered handlers.
      */
-    dispatch: function dispatch(targetWindow, name, message) {
-      targetWindow.postMessage({
+    dispatch: function dispatch(name, message) {
+      target.postMessage({
         type: name,
         data: message,
         key: streamId
@@ -733,29 +765,29 @@ var Inspector = function Inspector() {
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(InspectorContext.Provider, {
     value: state,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_StackrPage__WEBPACK_IMPORTED_MODULE_5__.StackrPageContextProvider, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-        className: "fixed top-0 left-0 w-screen h-screen bg-gray-700",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-          className: "absolute top-0 w-5/6 h-full",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Preview__WEBPACK_IMPORTED_MODULE_4__["default"], {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_StackrPage__WEBPACK_IMPORTED_MODULE_5__.StackrPage, {
-              url: "https://bishopfox.fsedev"
-            })
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "fixed top-0 left-0 w-screen h-screen bg-gray-700",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        className: "absolute top-0 w-5/6 h-full",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Preview__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_StackrPage__WEBPACK_IMPORTED_MODULE_5__.StackrPage, {
+            url: "https://bishopfox.fsedev"
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-          className: "absolute top-0 right-0 w-1/6 h-full",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_ComponentsList__WEBPACK_IMPORTED_MODULE_3__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_ComponentDetails__WEBPACK_IMPORTED_MODULE_2__["default"], {
-            instance: curInstance
-          })]
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        className: "absolute top-0 right-0 w-1/6 h-full",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_ComponentsList__WEBPACK_IMPORTED_MODULE_3__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_ComponentDetails__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          instance: curInstance
         })]
-      })
+      })]
     })
   });
 };
 
 react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react__WEBPACK_IMPORTED_MODULE_0__.StrictMode, {
-  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(Inspector, {})
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_StackrPage__WEBPACK_IMPORTED_MODULE_5__.StackrPageContextProvider, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(Inspector, {})
+  })
 }), document.getElementById('stackr-root'));
 
 /***/ }),

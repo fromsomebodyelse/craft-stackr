@@ -36,7 +36,7 @@ const PropertyValue = ({component, param}) => {
 const ComponentThumb = () => {
   return  (
     <div className="border border-gray-400 rounded-md overflow-hidden">
-      <div className="w-full aspect-square bg-white text-gray-400">
+      <div className="w-full px-2 py-2 aspect-square bg-white text-gray-400">
         <svg className="h-auto w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
         </svg>
@@ -47,7 +47,6 @@ const ComponentThumb = () => {
 
 
 const ComponentDetails = ({instance}) => {
-  const {actions} = useContext(StackrPageContext);
   const {setCurInstance} = useContext(InspectorContext);
   const [component, setComponent] = useState(null);
 

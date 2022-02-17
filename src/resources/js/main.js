@@ -18,26 +18,26 @@ const Inspector = () => {
 
   return (
     <InspectorContext.Provider value={state}>
-      <StackrPageContextProvider>
-        <div className="fixed top-0 left-0 w-screen h-screen bg-gray-700">
-          <div className="absolute top-0 w-5/6 h-full">
-            <Preview>
-              <StackrPage url="https://bishopfox.fsedev" />
-            </Preview>
-          </div>
-          <div className="absolute top-0 right-0 w-1/6 h-full">
-            <ComponentsList />
-            <ComponentDetails instance={curInstance} />
-          </div>
+      <div className="fixed top-0 left-0 w-screen h-screen bg-gray-700">
+        <div className="absolute top-0 w-5/6 h-full">
+          <Preview>
+            <StackrPage url="https://bishopfox.fsedev" />
+          </Preview>
         </div>
-      </StackrPageContextProvider>
+        <div className="absolute top-0 right-0 w-1/6 h-full">
+          <ComponentsList />
+          <ComponentDetails instance={curInstance} />
+        </div>
+      </div>
     </InspectorContext.Provider>
   );
 }
 
 ReactDOM.render(
   <React.StrictMode>
+    <StackrPageContextProvider>
       <Inspector />
+    </StackrPageContextProvider>
   </React.StrictMode>,
   document.getElementById('stackr-root')
 );

@@ -2,7 +2,7 @@
  * API for dispatching events between windows that have the `window.x`
  * library loaded.
  */
- export const eventDispatcher = (streamId) => {
+ export const eventDispatcher = (target, streamId) => {
   const handlers = {};
 
   // Listen for messages being sent to the current window. Received
@@ -30,8 +30,8 @@
     /**
      * Dispatch a message to any regsitered handlers.
      */
-    dispatch: (targetWindow, name, message) => {
-      targetWindow.postMessage({type: name, data: message, key: streamId}, '*');
+    dispatch: (name, message) => {
+      target.postMessage({type: name, data: message, key: streamId}, '*');
     }
   };
 };

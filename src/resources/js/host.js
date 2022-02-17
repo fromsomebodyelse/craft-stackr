@@ -1,9 +1,29 @@
 import { eventDispatcher } from "./dispatcher";
 import { getComponentDepth, getComponentChildren, getComponentParent } from "./utils";
 
-function decorateInstance(el) {
+function highlightInstance(id, highlight = true) {
+  const el = document.querySelector(`[data-stackr-component="${id}"]`);
+
+  if (el) {
+    if (highlight) el.scrollIntoView({block: 'center', behavior: 'smooth'});
+    el.classList.toggle('stackr-highlight', highlight);
+  }
+}
+
+function decorateInstance(id, el, dispatcher) {
   const data = window.stackrComponents[el.getAttribute('data-stackr-component')];
   const stackrDiv = document.createElement('div');
+
+  el.addEventListener('mouseover', (e) => {
+    highlightInstance(id);
+    dispatcher.dispatch('STACKR_INSTANCE_MOUSE_OVER', id);
+  });
+
+  el.addEventListener('mouseout', (e) => {
+    highlightInstance(id, false);
+    dispatcher.dispatch('STACKR_INSTANCE_MOUSE_OUT', id);
+  });
+
   stackrDiv.classList.add('stackr-debug');
   el.appendChild(stackrDiv);
 
@@ -12,8 +32,13 @@ function decorateInstance(el) {
 
 
 (function() {
+  const dispatcher = eventDispatcher(window.parent, "stackr-preview");
   const instances = Object.keys(window.stackrComponents).map(key => {
-    const el = decorateInstance(document.querySelector(`[data-stackr-component="${key}"]`));
+    const el = decorateInstance(
+      key,
+      document.querySelector(`[data-stackr-component="${key}"]`),
+      dispatcher
+    );
 
     return {
       id: key,
@@ -24,21 +49,14 @@ function decorateInstance(el) {
     };
   });
 
-  const dispatcher = eventDispatcher("stackr-preview");
-
   // Listen for events from the inspector.
   dispatcher.on('STACKR_HIGHLIGHT_INSTANCE', (obj) => {
-    const el = document.querySelector(`[data-stackr-component="${obj.id}"]`);
-
-    if (el) {
-      if (obj.highlight) el.scrollIntoView({block: 'center', behavior: 'smooth'});
-      el.classList.toggle('stackr-highlight', obj.highlight);
-    }
+    highlightInstance(obj.id, obj.highlight);
   });
 
   console.log('%c Stackr!2', 'background: #222; color: #bada55');
 
-  dispatcher.dispatch(window.parent, 'STACKR_INIT_PAGE', {
+  dispatcher.dispatch('STACKR_INIT_PAGE', {
     url: document.location.href,
     instances
   });

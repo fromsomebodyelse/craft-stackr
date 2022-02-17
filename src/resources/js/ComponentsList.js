@@ -3,7 +3,7 @@ import { StackrPageContext } from "./StackrPage";
 import { InspectorContext } from "./main";
 
 const ComponentsList = () => {
-  const {instances, actions} = useContext(StackrPageContext);
+  const {instances, mouseOver, actions} = useContext(StackrPageContext);
   const {setCurInstance} = useContext(InspectorContext);
 
   const handleMouseOver = useCallback((instance) => {
@@ -31,9 +31,10 @@ const ComponentsList = () => {
         <div className="flex flex-col gap-y-2 mb-16 px-6">
           { instances.map(instance => {
             const depthClassName = ['ml-0', 'ml-4', 'ml-8', 'ml-12'][instance.depth];
+            const bgColor = mouseOver.includes(instance.id) ? 'bg-blue-300' : 'bg-gray-300';
 
             return (
-              <div className={`flex justify-between items-center px-4 py-2 bg-gray-300 cursor-pointer ${depthClassName} shadow-sm rounded-sm hover:bg-blue-300`} key={instance.id}
+              <div className={`flex justify-between items-center px-4 py-2 ${bgColor} cursor-pointer ${depthClassName} shadow-sm rounded-sm hover:bg-blue-300`} key={instance.id}
                 onMouseOver={(e) => handleMouseOver(instance)}
                 onMouseOut={(e) => handleMouseOut(instance)}
                 onClick={(e) => handleClick(instance)}

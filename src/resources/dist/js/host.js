@@ -16,7 +16,7 @@ __webpack_require__.r(__webpack_exports__);
  * API for dispatching events between windows that have the `window.x`
  * library loaded.
  */
-var eventDispatcher = function eventDispatcher(streamId) {
+var eventDispatcher = function eventDispatcher(target, streamId) {
   var handlers = {}; // Listen for messages being sent to the current window. Received
   // messages are only delegated to their handler if the handler exists
   // and the "key" matches the streamID of the dispatcher. This helps
@@ -43,8 +43,8 @@ var eventDispatcher = function eventDispatcher(streamId) {
     /**
      * Dispatch a message to any regsitered handlers.
      */
-    dispatch: function dispatch(targetWindow, name, message) {
-      targetWindow.postMessage({
+    dispatch: function dispatch(name, message) {
+      target.postMessage({
         type: name,
         data: message,
         key: streamId
@@ -200,17 +200,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-function decorateInstance(el) {
+function highlightInstance(id) {
+  var highlight = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  var el = document.querySelector("[data-stackr-component=\"".concat(id, "\"]"));
+
+  if (el) {
+    if (highlight) el.scrollIntoView({
+      block: 'center',
+      behavior: 'smooth'
+    });
+    el.classList.toggle('stackr-highlight', highlight);
+  }
+}
+
+function decorateInstance(id, el, dispatcher) {
   var data = window.stackrComponents[el.getAttribute('data-stackr-component')];
   var stackrDiv = document.createElement('div');
+  el.addEventListener('mouseover', function (e) {
+    highlightInstance(id);
+    dispatcher.dispatch('STACKR_INSTANCE_MOUSE_OVER', id);
+  });
+  el.addEventListener('mouseout', function (e) {
+    highlightInstance(id, false);
+    dispatcher.dispatch('STACKR_INSTANCE_MOUSE_OUT', id);
+  });
   stackrDiv.classList.add('stackr-debug');
   el.appendChild(stackrDiv);
   return el;
 }
 
 (function () {
+  var dispatcher = (0,_dispatcher__WEBPACK_IMPORTED_MODULE_0__.eventDispatcher)(window.parent, "stackr-preview");
   var instances = Object.keys(window.stackrComponents).map(function (key) {
-    var el = decorateInstance(document.querySelector("[data-stackr-component=\"".concat(key, "\"]")));
+    var el = decorateInstance(key, document.querySelector("[data-stackr-component=\"".concat(key, "\"]")), dispatcher);
     return _objectSpread(_objectSpread({
       id: key
     }, window.stackrComponents[key]), {}, {
@@ -218,22 +240,13 @@ function decorateInstance(el) {
       parent: (0,_utils__WEBPACK_IMPORTED_MODULE_1__.getComponentParent)(el),
       children: (0,_utils__WEBPACK_IMPORTED_MODULE_1__.getComponentChildren)(el)
     });
-  });
-  var dispatcher = (0,_dispatcher__WEBPACK_IMPORTED_MODULE_0__.eventDispatcher)("stackr-preview"); // Listen for events from the inspector.
+  }); // Listen for events from the inspector.
 
   dispatcher.on('STACKR_HIGHLIGHT_INSTANCE', function (obj) {
-    var el = document.querySelector("[data-stackr-component=\"".concat(obj.id, "\"]"));
-
-    if (el) {
-      if (obj.highlight) el.scrollIntoView({
-        block: 'center',
-        behavior: 'smooth'
-      });
-      el.classList.toggle('stackr-highlight', obj.highlight);
-    }
+    highlightInstance(obj.id, obj.highlight);
   });
   console.log('%c Stackr!2', 'background: #222; color: #bada55');
-  dispatcher.dispatch(window.parent, 'STACKR_INIT_PAGE', {
+  dispatcher.dispatch('STACKR_INIT_PAGE', {
     url: document.location.href,
     instances: instances
   });
