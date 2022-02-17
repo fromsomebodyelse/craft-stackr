@@ -16,7 +16,7 @@ function decorateComponent(element) {
   return element;
 }
 
-const Main = () => {
+const Inspector = () => {
   const [curInstance, setCurInstance] = useState(null);
   const [instanceElements, setInstanceElements] = useState([]);
   const [show, setShow] = useState(false);
@@ -62,7 +62,7 @@ const Main = () => {
 
 ReactDOM.render(
   <React.StrictMode>
-    <Main />
+    <Inspector />
   </React.StrictMode>,
   document.getElementById('stackr-root')
 );
