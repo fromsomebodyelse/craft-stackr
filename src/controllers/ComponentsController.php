@@ -2,6 +2,7 @@
 
 namespace fse\stackr\controllers;
 
+use craft\web\View;
 use fse\stackr\components\ComponentSchema;
 use fse\stackr\Stackr;
 use Craft;

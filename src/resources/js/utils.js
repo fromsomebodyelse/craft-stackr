@@ -6,12 +6,30 @@ export const getComponentEl = (instanceId) => {
 }
 
 /**
+ * Returns the depth of the provided element.
+ */
+export const getComponentDepth = (el) => {
+  let depth = 0;
+  let node = el;
+  // Increase depth until we reach the root (root has depth 0)
+  while ((node = node.parentElement)) {
+      if (node.hasAttribute('data-stackr-component')) {
+        depth++;
+      }
+  }
+
+  return depth;
+}
+
+/**
  * Returns the direct children of the provided element.
  */
 export const getComponentChildren = (el) => {
   const children = Array.from(el.querySelectorAll('[data-stackr-component]'));
   return children.filter((child) => {
       return getComponentParent(child) === el;
+  }).map((el) => {
+    return el.getAttribute('data-stackr-component');
   });
 }
 
@@ -21,7 +39,7 @@ export const getComponentChildren = (el) => {
 export const getComponentParent = (el) => {
   let parent = el;
   while ((parent = parent.parentElement) && !parent.hasAttribute('data-stackr-component'));
-  return parent;
+  return parent ? parent.getAttribute('data-stackr-component') : null;
 }
 
 

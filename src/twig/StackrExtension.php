@@ -53,16 +53,11 @@ class StackrExtension extends AbstractExtension
         );
 
         $html = '';
-        $html .= '<div id="stackr-root"></div>';
-        $html .= '<script type="text/javascript">';
-        $html .= '  window.csrfTokenName = "' . Craft::$app->getConfig()->general->csrfTokenName . '";';
-        $html .= '  window.csrfTokenValue = "' .  Craft::$app->request->csrfToken . '";';
-        $html .= '</script>';
         $html .= '<script type="text/javascript">';
         $html .= '  window.stackrComponents = ' . $debugJson . ';';
         $html .= '</script>';
-        $html .= '<script src="' . Craft::$app->getAssetManager()->getPublishedUrl('@fse/stackr/resources/dist/js/stackr.js', true) . '"></script>';
-        $html .= '<link href="' . Craft::$app->getAssetManager()->getPublishedUrl('@fse/stackr/resources/dist/css/stackr.css', true) . '" rel="stylesheet">';
+        $html .= '<link href="' . Craft::$app->getAssetManager()->getPublishedUrl('@fse/stackr/resources/dist/css/host.css', true) . '" rel="stylesheet">';
+        $html .= '<script src="' . Craft::$app->getAssetManager()->getPublishedUrl('@fse/stackr/resources/dist/js/host.js', true) . '"></script>';
 
         return $html;
    }

@@ -1,43 +1,22 @@
-import React, { useCallback, useState } from "react";
-import { highlightComponent } from "./utils";
+import React, { useCallback, useContext } from "react";
+import { StackrPageContext } from "./StackrPage";
+import { InspectorContext } from "./main";
 
-function getDepth(el) {
-    let depth = 0;
-    let node = el;
-    // Increase depth until we reach the root (root has depth 0)
-    while ((node = node.parentElement)) {
-        if (node.hasAttribute('data-stackr-component')) {
-          depth++;
-        }
-    }
-
-    return depth;
-}
-
-const ComponentsList = ({setInstance}) => {
-
-  const instances = Object.keys(window.stackrComponents).map(key => {
-    const el =  document.querySelector(`[data-stackr-component="${key}"]`);
-
-    return {
-      id: key,
-      el,
-      ...window.stackrComponents[key],
-      depth: getDepth(el),
-    }
-  });
+const ComponentsList = () => {
+  const {instances, actions} = useContext(StackrPageContext);
+  const {setCurInstance} = useContext(InspectorContext);
 
   const handleMouseOver = useCallback((instance) => {
-    instance.el.scrollIntoView({block: "center", behavior: 'smooth'});
-    highlightComponent(instance.id);
+    actions.highlightInstance(instance.id);
   });
 
   const handleMouseOut = useCallback((instance) => {
-    highlightComponent(instance.id, false);
+    actions.highlightInstance(instance.id, false);
   });
 
   const handleClick = useCallback((instance) => {
-    setInstance(instance.id)
+    console.log(instance);
+    setCurInstance(instance);
   });
 
   return (
@@ -63,7 +42,7 @@ const ComponentsList = ({setInstance}) => {
                 <div className="text-sm">{instance.component}</div>
                 <div>
                   <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
                   </svg>
                 </div>
               </div>

@@ -1,68 +1,43 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import ReactDOM from 'react-dom';
 import ComponentDetails from './ComponentDetails';
 import ComponentsList from './ComponentsList';
-import { getComponentChildren, getComponentParent, highlightComponent } from './utils';
-import useKeyPress from './hooks/useKeyPress';
-// import './index.css';
-// import App from './App';
+import Preview from './Preview';
+import { StackrPage, StackrPageContextProvider } from './StackrPage';
 
-function decorateComponent(element) {
-  const data = window.stackrComponents[element.getAttribute('data-stackr-component')];
-  const stackrDiv = document.createElement('div');
-  stackrDiv.classList.add('stackr-debug');
-  element.appendChild(stackrDiv);
-
-  return element;
+const defaultState = {
+  curInstance: null,
+  setCurInstance: null,
 }
 
+export const InspectorContext = React.createContext();
+
 const Inspector = () => {
-  const [curInstance, setCurInstance] = useState(null);
-  const [instanceElements, setInstanceElements] = useState([]);
-  const [show, setShow] = useState(false);
-
-  const handleMouseMove = useCallback((e) => {
-    const componentUnderPoint = document.elementsFromPoint(e.clientX, e.clientY)
-    .find(el => el.getAttribute('data-stackr-component'));
-
-    if (componentUnderPoint) {
-      const instanceId = componentUnderPoint.getAttribute('data-stackr-component')
-      highlightComponent(instanceId);
-    }
-  });
-
-  useKeyPress('ArrowUp', () => {
-    setShow(!show);
-  });
-
-  useEffect(() => {
-
-    window.addEventListener('mousemove', handleMouseMove);
-
-    // Loop through all stackr component instances and look for
-    // the associated HTML element.
-    const instances = Object.keys(window.stackrComponents).map(key => {
-      const el =  document.querySelector(`[data-stackr-component="${key}"]`);
-      decorateComponent(el);
-      return el;
-    });
-
-    setInstanceElements(instances);
-  }, []);
-
-  if (!show) return null;
+  const [curInstance, setCurInstance] = React.useState(null);
+  const state = {curInstance, setCurInstance};
 
   return (
-    <div>
-      <ComponentsList setInstance={setCurInstance}/>
-      { curInstance && <ComponentDetails instance={curInstance} setInstance={setCurInstance} /> }
-    </div>
+    <InspectorContext.Provider value={state}>
+      <StackrPageContextProvider>
+        <div className="fixed top-0 left-0 w-screen h-screen bg-gray-700">
+          <div className="absolute top-0 w-5/6 h-full">
+            <Preview>
+              <StackrPage url="https://bishopfox.fsedev" />
+            </Preview>
+          </div>
+          <div className="absolute top-0 right-0 w-1/6 h-full">
+            <ComponentsList />
+            <ComponentDetails instance={curInstance} />
+          </div>
+        </div>
+      </StackrPageContextProvider>
+    </InspectorContext.Provider>
   );
 }
 
 ReactDOM.render(
   <React.StrictMode>
-    <Inspector />
+      <Inspector />
   </React.StrictMode>,
   document.getElementById('stackr-root')
 );

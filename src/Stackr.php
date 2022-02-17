@@ -69,8 +69,9 @@ class Stackr extends Plugin
      */
     private function _registerSiteRoutes()
     {
-        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES,
+        Event::on(UrlManager::class, URLManager::EVENT_REGISTER_CP_URL_RULES,
             function(RegisterUrlRulesEvent $event) {
+                $event->rules['stackr'] = 'stackr/inspector/index';
                 $event->rules['POST stackr/components'] = 'stackr/components/index';
             }
         );

@@ -1,0 +1,14 @@
+<html>
+<head>
+    <title>Stackr Inspector</title>
+    <link rel="stylesheet" href="{{ files['stackr.css'] }}" type="text/css" media="all">
+</head>
+<body>
+    <div id="stackr-root"></div>
+    <script type="text/javascript">
+        window.csrfTokenName = '{{ token.name }}';
+        window.csrfTokenValue = '{{ token.value }}';
+    </script>
+
+    <script type="text/javascript" src="{{ files['stackr.js'] }}"></script>
+</body>
