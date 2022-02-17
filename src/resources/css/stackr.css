@@ -2,28 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-[data-stackr-component] {
-  position: relative;
-  cursor: pointer;
-}
-
-[data-stackr-component] > .stackr-debug {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1000;
-  pointer-events: none;
-  border: 2px solid hsl(0, 59%, 70%);
-}
-
-[data-stackr-component].stackr-highlight > .stackr-debug {
-  display: block;
-  border: 2px solid hsl(228, 79%, 56%);
-  background-color: rgba(0, 51, 255, 0.3);
-}
-
 .details-window {
   position: absolute;
   top: 0;

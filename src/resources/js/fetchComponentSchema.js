@@ -17,7 +17,6 @@ const createComponentModal = (instance, schema) => {
 export const fetchComponentSchema = async (instance) => {
   const components = [instance.component];
   const token = {[window.csrfTokenName]: window.csrfTokenValue};
-  console.log('fetchComponentSchema', {instance, token});
 
   const result = await fetch('/admin/stackr/components', {
     method: 'POST',

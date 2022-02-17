@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { fetchComponentSchema } from "./fetchComponentSchema";
 import { StackrPageContext } from './StackrPage';
+import { InspectorContext } from './main';
 
 
 const UrlValue = ({value}) => {
@@ -47,6 +48,7 @@ const ComponentThumb = () => {
 
 const ComponentDetails = ({instance}) => {
   const {actions} = useContext(StackrPageContext);
+  const {setCurInstance} = useContext(InspectorContext);
   const [component, setComponent] = useState(null);
 
   useEffect(() => {
@@ -62,10 +64,10 @@ const ComponentDetails = ({instance}) => {
   }
 
   return (
-    <div className="relative details-window bg-gray-100" onClick={(e) => setComponent(null)}>
+    <div className="relative details-window bg-gray-100">
       <header className="sticky top-0 px-4 py-4 bg-gray-100 border-b border-gray-300">
         <div className="mb-2">
-          <button className="" onClick={(e) => setInstance(null)}>
+          <button className="" onClick={(e) => setCurInstance(null)}>
             <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
             </svg>

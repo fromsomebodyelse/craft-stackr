@@ -15,7 +15,6 @@ const ComponentsList = () => {
   });
 
   const handleClick = useCallback((instance) => {
-    console.log(instance);
     setCurInstance(instance);
   });
 

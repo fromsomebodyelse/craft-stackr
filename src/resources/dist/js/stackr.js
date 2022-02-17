@@ -26,7 +26,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _fetchComponentSchema__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fetchComponentSchema */ "./src/resources/js/fetchComponentSchema.js");
 /* harmony import */ var _StackrPage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StackrPage */ "./src/resources/js/StackrPage.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _main__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./main */ "./src/resources/js/main.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -47,9 +48,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
 
 
+
 var UrlValue = function UrlValue(_ref) {
   var value = _ref.value;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("a", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("a", {
     className: "text-blue-400 whitespace-nowrap overflow-ellipsis",
     href: "value",
     target: "_blank",
@@ -59,7 +61,7 @@ var UrlValue = function UrlValue(_ref) {
 
 var ObjValue = function ObjValue(_ref2) {
   var value = _ref2.value;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("pre", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("pre", {
     children: JSON.stringify(value, null, 2)
   });
 };
@@ -68,44 +70,44 @@ var PropertyValue = function PropertyValue(_ref3) {
   var component = _ref3.component,
       param = _ref3.param;
 
-  var val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+  var val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
     children: param.value
   });
 
   if (_typeof(param.value) === 'object') {
-    val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(ObjValue, {
+    val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(ObjValue, {
       value: param.value
     });
   }
 
   if (param.value === null) {
-    val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+    val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
       className: "text-gray-500",
       children: "Not Set"
     });
   } else if (param.name === 'url' && typeof param.value === 'string') {
-    val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(UrlValue, {
+    val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(UrlValue, {
       value: param.value
     });
   }
 
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
     className: "mt-2 px-2 py-2 bg-white border rounded-md shadow-sm text-sm overflow-x-scroll",
     children: val
   });
 };
 
 var ComponentThumb = function ComponentThumb() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
     className: "border border-gray-400 rounded-md overflow-hidden",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
       className: "w-full aspect-square bg-white text-gray-400",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("svg", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
         className: "h-auto w-full",
         fill: "none",
         viewBox: "0 0 24 24",
         stroke: "currentColor",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("path", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
           strokeLinecap: "round",
           strokeLinejoin: "round",
           strokeWidth: "2",
@@ -121,6 +123,9 @@ var ComponentDetails = function ComponentDetails(_ref4) {
 
   var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_StackrPage__WEBPACK_IMPORTED_MODULE_2__.StackrPageContext),
       actions = _useContext.actions;
+
+  var _useContext2 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_main__WEBPACK_IMPORTED_MODULE_3__.InspectorContext),
+      setCurInstance = _useContext2.setCurInstance;
 
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
       _useState2 = _slicedToArray(_useState, 2),
@@ -138,69 +143,66 @@ var ComponentDetails = function ComponentDetails(_ref4) {
   }, [instance]);
 
   if (!component) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
       children: "Loading"
     });
   }
 
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     className: "relative details-window bg-gray-100",
-    onClick: function onClick(e) {
-      return setComponent(null);
-    },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("header", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("header", {
       className: "sticky top-0 px-4 py-4 bg-gray-100 border-b border-gray-300",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         className: "mb-2",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
           className: "",
           onClick: function onClick(e) {
-            return setInstance(null);
+            return setCurInstance(null);
           },
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("svg", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
             className: "h-5 w-5",
             viewBox: "0 0 20 20",
             fill: "currentColor",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("path", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
               fillRule: "evenodd",
               d: "M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z",
               clipRule: "evenodd"
             })
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "flex",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "w-full max-w-[60px]",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(ComponentThumb, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(ComponentThumb, {
             component: component
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "mt-2 ml-4",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
             className: "text-xl",
             children: component.name
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
             className: "text-sm",
             children: component.description
           })]
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
       className: "flex flex-col gap-y-3 mb-16 mt-4 px-2 ",
       children: component.parameters.map(function (param, i) {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "px-2",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             className: "flex text-sm gap-x-2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
               className: "font-bold text-gray-600",
               children: [param.name, ":"]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
               className: "text-gray-500",
               children: param.description
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(PropertyValue, {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(PropertyValue, {
             param: param,
             component: component
           })]
@@ -250,7 +252,6 @@ var ComponentsList = function ComponentsList() {
     actions.highlightInstance(instance.id, false);
   });
   var handleClick = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function (instance) {
-    console.log(instance);
     setCurInstance(instance);
   });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
@@ -640,11 +641,7 @@ var fetchComponentSchema = /*#__PURE__*/function () {
           case 0:
             components = [instance.component];
             token = _defineProperty({}, window.csrfTokenName, window.csrfTokenValue);
-            console.log('fetchComponentSchema', {
-              instance: instance,
-              token: token
-            });
-            _context.next = 5;
+            _context.next = 4;
             return fetch('/admin/stackr/components', {
               method: 'POST',
               body: JSON.stringify(_objectSpread(_objectSpread({}, token), {}, {
@@ -656,16 +653,16 @@ var fetchComponentSchema = /*#__PURE__*/function () {
               }
             });
 
-          case 5:
+          case 4:
             result = _context.sent;
-            _context.next = 8;
+            _context.next = 7;
             return result.json();
 
-          case 8:
+          case 7:
             schemas = _context.sent;
             return _context.abrupt("return", createComponentModal(instance, schemas.components[0]));
 
-          case 10:
+          case 9:
           case "end":
             return _context.stop();
         }
