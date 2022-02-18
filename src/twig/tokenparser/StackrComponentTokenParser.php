@@ -1,13 +1,13 @@
 <?php
-namespace fse\stackr\twig;
+namespace fse\stackr\twig\tokenparser;
 
-use fse\stackr\twig\ComponentDefinitionNode;
+use fse\stackr\twig\node\ComponentDefinitionNode;
 use Twig\Node\Node as TwigNode;
 use Twig\Token as TwigToken;
 use Twig\TokenParser\AbstractTokenParser;
 
 
-class StackrTokenParser extends AbstractTokenParser
+class StackrComponentTokenParser extends AbstractTokenParser
 {
 	private $counter = 0;
 
@@ -23,12 +23,18 @@ class StackrTokenParser extends AbstractTokenParser
 		$parser = $this->parser;
         $stream = $parser->getStream();
 
+		$defaultValues = null;
+
+		if ($stream->nextIf(TwigToken::NAME_TYPE, 'default')) {
+			$defaultValues = $parser->getExpressionParser()->parseExpression();
+		}
+
         $stream->expect(TwigToken::BLOCK_END_TYPE);
         $body = $parser->subparse([$this, 'decideEnd'], true);
         $stream->expect(TwigToken::BLOCK_END_TYPE);
 
         // pass all parsed data to Node class.
-        return new ComponentDefinitionNode($body, $lineNumber, $this->getTag());
+        return new ComponentDefinitionNode($body, $defaultValues, $lineNumber, $this->getTag());
     }
 
 	public function decideEnd(TwigToken $token)
