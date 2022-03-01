@@ -57,11 +57,7 @@ const ComponentDetails = ({instance}) => {
     }
   }, [instance]);
 
-  if (!component) {
-    return (<p>Loading</p>);
-  }
-
-  return (
+  return component && (
     <div className="relative details-window bg-gray-100">
       <header className="sticky top-0 px-4 py-4 bg-gray-100 border-b border-gray-300">
         <div className="mb-2">
