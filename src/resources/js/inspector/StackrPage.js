@@ -44,7 +44,7 @@ const StackrPageContextProvider = ({children}) => {
 
     // 2. Inspector connected successfully.
     host.on('STACKR_HOST_CONNECTED', (data) => {
-      console.log('Stackr-Inspector: Inspector connected.');
+      console.log('Stackr-Inspector: Inspector connected.', data);
       setPageData(data);
 
       host.on('STACKR_INSTANCE_MOUSE_OVER', (data) => onMouseOverInstance(data));

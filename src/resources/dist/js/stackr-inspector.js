@@ -393,22 +393,22 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var ComponentsList = function ComponentsList() {
+var ComponentListItem = function ComponentListItem(_ref) {
+  var instance = _ref.instance,
+      allInstances = _ref.allInstances;
+
   var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_StackrPage__WEBPACK_IMPORTED_MODULE_1__.StackrPageContext),
-      instances = _useContext.instances,
       mouseOver = _useContext.mouseOver,
       actions = _useContext.actions;
-
-  var listRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
 
   var _useContext2 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_Inspector__WEBPACK_IMPORTED_MODULE_2__.InspectorContext),
       setCurInstance = _useContext2.setCurInstance;
 
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      isScrolled = _useState2[0],
-      setIsScrolled = _useState2[1];
-
+  var depthClassName = ['ml-0', 'ml-4', 'ml-8', 'ml-12'][instance.depth];
+  var bgColor = mouseOver.includes(instance.id) ? 'bg-blue-300' : 'bg-gray-300';
+  var children = allInstances.filter(function (child) {
+    return child.parent === instance.id;
+  });
   var handleMouseOver = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function (instance) {
     actions.highlightInstance(instance.id);
   });
@@ -418,6 +418,46 @@ var ComponentsList = function ComponentsList() {
   var handleClick = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function (instance) {
     setCurInstance(instance);
   });
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      className: "flex justify-between items-center px-4 py-2 ".concat(bgColor, " cursor-pointer ").concat(depthClassName, " shadow-sm rounded-sm hover:bg-blue-300"),
+      onMouseOver: function onMouseOver(e) {
+        return handleMouseOver(instance);
+      },
+      onMouseOut: function onMouseOut(e) {
+        return handleMouseOut(instance);
+      },
+      onClick: function onClick(e) {
+        return handleClick(instance);
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        className: "text-sm",
+        children: instance.component
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_heroicons_react_solid__WEBPACK_IMPORTED_MODULE_3__.SearchIcon, {
+          className: "w-4 h-4"
+        })
+      })]
+    }, instance.id), children.map(function (child) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(ComponentListItem, {
+        instance: child,
+        allInstances: allInstances
+      }, child.id);
+    })]
+  });
+};
+
+var ComponentsList = function ComponentsList() {
+  var _useContext3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_StackrPage__WEBPACK_IMPORTED_MODULE_1__.StackrPageContext),
+      instances = _useContext3.instances;
+
+  var listRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      isScrolled = _useState2[0],
+      setIsScrolled = _useState2[1];
+
   var handleScroll = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function (e) {
     setIsScrolled(listRef.current.scrollTop > 16);
   });
@@ -443,35 +483,12 @@ var ComponentsList = function ComponentsList() {
       className: "flex flex-col justify-between h-full pt-4",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         className: "flex flex-col gap-y-2 mb-16 px-6",
-        children: instances.map(function (instance) {
-          var depthClassName = ['ml-0', 'ml-4', 'ml-8', 'ml-12'][instance.depth];
-          var bgColor = mouseOver.includes(instance.id) ? 'bg-blue-300' : 'bg-gray-300';
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-            className: "flex justify-between items-center px-4 py-2 ".concat(bgColor, " cursor-pointer ").concat(depthClassName, " shadow-sm rounded-sm hover:bg-blue-300"),
-            onMouseOver: function onMouseOver(e) {
-              return handleMouseOver(instance);
-            },
-            onMouseOut: function onMouseOut(e) {
-              return handleMouseOut(instance);
-            },
-            onClick: function onClick(e) {
-              return handleClick(instance);
-            },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "text-sm",
-              children: instance.component
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
-                className: "h-4 w-4",
-                viewBox: "0 0 20 20",
-                fill: "currentColor",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
-                  fillRule: "evenodd",
-                  d: "M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z",
-                  clipRule: "evenodd"
-                })
-              })
-            })]
+        children: instances.filter(function (instance) {
+          return instance.depth === 0;
+        }).map(function (instance) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(ComponentListItem, {
+            instance: instance,
+            allInstances: instances
           }, instance.id);
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
@@ -555,14 +572,8 @@ var Inspector = function Inspector() {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
         className: "absolute top-0 w-5/6 h-full",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Preview__WEBPACK_IMPORTED_MODULE_3__["default"], {
-          children: url ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_StackrPage__WEBPACK_IMPORTED_MODULE_4__.StackrPage, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_StackrPage__WEBPACK_IMPORTED_MODULE_4__.StackrPage, {
             url: url
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            className: "flex items-center justify-center w-full h-full",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-              className: "bg-gray-600 text-sm text-white px-4 py-2",
-              children: "Not Loaded."
-            })
           })
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
@@ -797,7 +808,7 @@ var StackrPageContextProvider = function StackrPageContextProvider(_ref) {
     }); // 2. Inspector connected successfully.
 
     host.on('STACKR_HOST_CONNECTED', function (data) {
-      console.log('Stackr-Inspector: Inspector connected.');
+      console.log('Stackr-Inspector: Inspector connected.', data);
       setPageData(data);
       host.on('STACKR_INSTANCE_MOUSE_OVER', function (data) {
         return onMouseOverInstance(data);

@@ -1,13 +1,15 @@
 import React, { useCallback, useContext, useRef, useState } from "react";
 import { StackrPageContext } from "./StackrPage";
 import { InspectorContext } from './Inspector';
-import { CursorClickIcon, HashtagIcon } from '@heroicons/react/solid'
+import { HashtagIcon, SearchIcon } from '@heroicons/react/solid'
 
-const ComponentsList = () => {
-  const {instances, mouseOver, actions} = useContext(StackrPageContext);
-  const listRef = useRef(null);
+
+const ComponentListItem = ({instance, allInstances}) => {
+  const {mouseOver, actions} = useContext(StackrPageContext);
   const {setCurInstance} = useContext(InspectorContext);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const depthClassName = ['ml-0', 'ml-4', 'ml-8', 'ml-12'][instance.depth];
+  const bgColor = mouseOver.includes(instance.id) ? 'bg-blue-300' : 'bg-gray-300';
+  const children = allInstances.filter(child => child.parent === instance.id);
 
   const handleMouseOver = useCallback((instance) => {
     actions.highlightInstance(instance.id);
@@ -20,6 +22,31 @@ const ComponentsList = () => {
   const handleClick = useCallback((instance) => {
     setCurInstance(instance);
   });
+
+  return (
+    <React.Fragment>
+      <div className={`flex justify-between items-center px-4 py-2 ${bgColor} cursor-pointer ${depthClassName} shadow-sm rounded-sm hover:bg-blue-300`} key={instance.id}
+        onMouseOver={(e) => handleMouseOver(instance)}
+        onMouseOut={(e) => handleMouseOut(instance)}
+        onClick={(e) => handleClick(instance)}
+      >
+        <div className="text-sm">{instance.component}</div>
+        <div>
+          <SearchIcon className="w-4 h-4" />
+        </div>
+      </div>
+
+      {children.map(child =>
+        <ComponentListItem key={child.id} instance={child} allInstances={allInstances} />
+      )}
+    </React.Fragment>
+  );
+}
+
+const ComponentsList = () => {
+  const {instances} = useContext(StackrPageContext);
+  const listRef = useRef(null);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const handleScroll = useCallback((e) => {
     setIsScrolled(listRef.current.scrollTop > 16);
@@ -38,25 +65,7 @@ const ComponentsList = () => {
       <div className="flex flex-col justify-between h-full pt-4">
         {/* List */}
         <div className="flex flex-col gap-y-2 mb-16 px-6">
-          { instances.map(instance => {
-            const depthClassName = ['ml-0', 'ml-4', 'ml-8', 'ml-12'][instance.depth];
-            const bgColor = mouseOver.includes(instance.id) ? 'bg-blue-300' : 'bg-gray-300';
-
-            return (
-              <div className={`flex justify-between items-center px-4 py-2 ${bgColor} cursor-pointer ${depthClassName} shadow-sm rounded-sm hover:bg-blue-300`} key={instance.id}
-                onMouseOver={(e) => handleMouseOver(instance)}
-                onMouseOut={(e) => handleMouseOut(instance)}
-                onClick={(e) => handleClick(instance)}
-              >
-                <div className="text-sm">{instance.component}</div>
-                <div>
-                  <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
-                  </svg>
-                </div>
-              </div>
-            );
-          }) }
+          { instances.filter(instance => instance.depth === 0).map(instance => <ComponentListItem key={instance.id} instance={instance} allInstances={instances} />) }
         </div>
 
         {/* Copyright */}
