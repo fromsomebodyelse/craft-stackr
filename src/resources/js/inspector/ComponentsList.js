@@ -1,10 +1,13 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useRef, useState } from "react";
 import { StackrPageContext } from "./StackrPage";
 import { InspectorContext } from './Inspector';
+import { CursorClickIcon, HashtagIcon } from '@heroicons/react/solid'
 
 const ComponentsList = () => {
   const {instances, mouseOver, actions} = useContext(StackrPageContext);
+  const listRef = useRef(null);
   const {setCurInstance} = useContext(InspectorContext);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const handleMouseOver = useCallback((instance) => {
     actions.highlightInstance(instance.id);
@@ -18,15 +21,21 @@ const ComponentsList = () => {
     setCurInstance(instance);
   });
 
+  const handleScroll = useCallback((e) => {
+    setIsScrolled(listRef.current.scrollTop > 16);
+  });
+
+  const headerShadow = isScrolled ? 'shadow-lg' : 'shadow-none';
+
   return (
-    <div className="flex flex-col relative details-window bg-gray-100 overflow-y-scroll">
-      <h1 className="flex items-center ml-3 my-4 text-lg font-bold text-gray-700">
-        <svg className="block h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M9.243 3.03a1 1 0 01.727 1.213L9.53 6h2.94l.56-2.243a1 1 0 111.94.486L14.53 6H17a1 1 0 110 2h-2.97l-1 4H15a1 1 0 110 2h-2.47l-.56 2.242a1 1 0 11-1.94-.485L10.47 14H7.53l-.56 2.242a1 1 0 11-1.94-.485L5.47 14H3a1 1 0 110-2h2.97l1-4H5a1 1 0 110-2h2.47l.56-2.243a1 1 0 011.213-.727zM9.03 8l-1 4h2.938l1-4H9.031z" clipRule="evenodd" />
-        </svg>
-        <span className="block">Stackr Inspect</span>
-      </h1>
-      <div className="flex flex-col justify-between h-full">
+    <div ref={listRef} className="flex flex-col relative details-window bg-gray-100 overflow-y-scroll" onScroll={(e) => handleScroll(e)}>
+      <div className={`sticky top-0 right-0 flex justify-between pl-3 pr-6 py-4 bg-gray-100 transition-shadow ${headerShadow}`}>
+        <h1 className="flex items-center text-lg font-bold text-gray-700">
+          <HashtagIcon className="block w-5 h-5" />
+          <span className="block">Stackr Inspect</span>
+        </h1>
+      </div>
+      <div className="flex flex-col justify-between h-full pt-4">
         {/* List */}
         <div className="flex flex-col gap-y-2 mb-16 px-6">
           { instances.map(instance => {
