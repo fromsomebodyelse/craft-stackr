@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 const Preview = ({children}) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [size, setSize] = useState({width: 0, height: 0});
   const container = useRef(null);
   const content = useRef(null);
   const isDragging = useRef(false);
@@ -29,7 +27,6 @@ const Preview = ({children}) => {
       const newWidth = Math.max(0.1, Math.min(1, newX / bounds.width));
 
       content.current.style.width = `${newWidth * 100}%`;
-      handle.current.style.right = `${Math.abs(100 - newWidth * 100)}%`;
     }
   }
 
@@ -49,10 +46,10 @@ const Preview = ({children}) => {
 
   return (
     <div ref={container} className="relative w-full h-full">
-      <div ref={content} className="w-full h-full">
+      <div ref={content} className="relative w-full h-full pr-[6px]">
         {children}
+        <div ref={handle} className="absolute top-0 right-0 w-[6px] h-full bg-gray-300 cursor-col-resize" onMouseDown={(e) => onMouseDown(e)}></div>
       </div>
-      <div ref={handle} className="absolute top-0 right-0 w-[6px] h-full bg-gray-300 cursor-col-resize" onMouseDown={(e) => onMouseDown(e)}></div>
     </div>
   );
 }

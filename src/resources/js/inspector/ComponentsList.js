@@ -55,7 +55,7 @@ const ComponentsList = () => {
   const headerShadow = isScrolled ? 'shadow-lg' : 'shadow-none';
 
   return (
-    <div ref={listRef} className="flex flex-col relative details-window bg-gray-100 overflow-y-scroll" onScroll={(e) => handleScroll(e)}>
+    <div ref={listRef} className="flex flex-col relative h-full w-full bg-gray-100 overflow-y-scroll" onScroll={(e) => handleScroll(e)}>
       <div className={`sticky top-0 right-0 flex justify-between pl-3 pr-6 py-4 bg-gray-100 transition-shadow ${headerShadow}`}>
         <h1 className="flex items-center text-lg font-bold text-gray-700">
           <HashtagIcon className="block w-5 h-5" />
