@@ -1,11 +1,11 @@
 import { eventDispatcher } from "./dispatcher";
 import { getComponentDepth, getComponentChildren, getComponentParent } from "./utils";
 
-function highlightInstance(id, highlight = true) {
+function highlightInstance(id, highlight = true, scrollIntoView = true) {
   const el = document.querySelector(`[data-stackr-component="${id}"]`);
 
   if (el) {
-    if (highlight) el.scrollIntoView({block: 'center', behavior: 'smooth'});
+    if (scrollIntoView && highlight) el.scrollIntoView({block: 'center', behavior: 'smooth'});
     el.classList.toggle('stackr-highlight', highlight);
   }
 }
@@ -15,7 +15,7 @@ function decorateInstance(id, el, dispatcher) {
   const stackrDiv = document.createElement('div');
 
   el.addEventListener('mouseover', (e) => {
-    highlightInstance(id);
+    highlightInstance(id, true, false);
     dispatcher.dispatch('STACKR_INSTANCE_MOUSE_OVER', id);
   });
 
