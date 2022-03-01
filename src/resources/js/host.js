@@ -30,14 +30,18 @@ function decorateInstance(id, el, dispatcher) {
   return el;
 }
 
+function getInstances(inspector) {
 
-(function() {
-  const dispatcher = eventDispatcher(window.parent, "stackr-preview");
-  const instances = Object.keys(window.stackrComponents).map(key => {
+  // Listen for events from the inspector.
+  inspector.on('STACKR_HIGHLIGHT_INSTANCE', (obj) => {
+    highlightInstance(obj.id, obj.highlight);
+  });
+
+  return Object.keys(window.stackrComponents).map(key => {
     const el = decorateInstance(
       key,
       document.querySelector(`[data-stackr-component="${key}"]`),
-      dispatcher
+      inspector
     );
 
     return {
@@ -48,17 +52,25 @@ function decorateInstance(id, el, dispatcher) {
       children: getComponentChildren(el),
     };
   });
+}
 
-  // Listen for events from the inspector.
-  dispatcher.on('STACKR_HIGHLIGHT_INSTANCE', (obj) => {
-    highlightInstance(obj.id, obj.highlight);
-  });
 
-  console.log('%c Stackr!2', 'background: #222; color: #bada55');
+(function() {
+  const inspector = eventDispatcher(window.parent, "stackr-inspector");
+  const url = document.location.href;
 
-  dispatcher.dispatch('STACKR_INIT_PAGE', {
-    url: document.location.href,
-    instances
+  // 1. Notify the inspector that we're ready.
+  console.log('Stackr-Host: Sending host ready message...');
+  inspector.dispatch('STACKR_HOST_READY', {url});
+
+  console.log('Stackr-Host: Waiting for inspector to connect...');
+
+  // 2. Wait for the Inspector to start.
+  inspector.on('STACKR_INSPECTOR_CONNECT', () => {
+    inspector.dispatch('STACKR_HOST_CONNECTED', {
+      url,
+      instances: getInstances(inspector)
+    });
   });
 })();
 

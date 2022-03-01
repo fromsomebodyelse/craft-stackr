@@ -32,12 +32,22 @@ const StackrPageContextProvider = ({children}) => {
 
   useEffect(() => {
     const iframe = document.querySelector('iframe#stackr-page').contentWindow;
-    // The host page will dispatch an event containing the pages's
-    // component tree.
-    dispatcher.current = eventDispatcher(iframe, 'stackr-preview');
-    dispatcher.current.on('STACKR_INIT_PAGE', (data) => setPageData(data));
-    dispatcher.current.on('STACKR_INSTANCE_MOUSE_OVER', (data) => onMouseOverInstance(data));
-    dispatcher.current.on('STACKR_INSTANCE_MOUSE_OUT', (data) => onMouseOutInstance(data));
+    const host = dispatcher.current = eventDispatcher(iframe, 'stackr-inspector');
+
+    // 1. Wait for the Host to indicate that the inspector can connect.
+    host.on('STACKR_HOST_READY', (data) => {
+      console.log(`Stackr-Inspector: Host ready at "${data.url}"`);
+      host.dispatch('STACKR_INSPECTOR_CONNECT');
+    });
+
+    // 2. Inspector connected successfully.
+    host.on('STACKR_HOST_CONNECTED', (data) => {
+      console.log('Stackr-Inspector: Inspector connected.');
+      setPageData(data);
+
+      host.on('STACKR_INSTANCE_MOUSE_OVER', (data) => onMouseOverInstance(data));
+      host.on('STACKR_INSTANCE_MOUSE_OUT', (data) => onMouseOutInstance(data));
+    });
   }, []);
 
   return (
