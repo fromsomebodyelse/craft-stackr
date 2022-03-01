@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { fetchComponentSchema } from "./fetchComponentSchema";
-import { StackrPageContext } from './StackrPage';
-import { InspectorContext } from './main';
+import { fetchComponentSchema } from "../fetchComponentSchema";
+import { InspectorContext } from './Inspector';
 
 
 const UrlValue = ({value}) => {

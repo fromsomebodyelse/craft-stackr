@@ -17,8 +17,8 @@ class InspectorController extends Controller
 
         $variables = [
             'files' => [
-                'stackr.js' => Craft::$app->getAssetManager()->getPublishedUrl('@fse/stackr/resources/dist/js/stackr.js', true),
-                'stackr.css' => Craft::$app->getAssetManager()->getPublishedUrl('@fse/stackr/resources/dist/css/stackr.css', true),
+                'stackr-inspector.js' => Craft::$app->getAssetManager()->getPublishedUrl('@fse/stackr/resources/dist/js/stackr-inspector.js', true),
+                'stackr-inspector.css' => Craft::$app->getAssetManager()->getPublishedUrl('@fse/stackr/resources/dist/css/stackr-inspector.css', true),
             ],
             'token' => [
                 'name' => Craft::$app->getConfig()->general->csrfTokenName,

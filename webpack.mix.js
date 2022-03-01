@@ -2,12 +2,12 @@ const mix = require("laravel-mix");
 
 mix.setPublicPath('./src/resources/dist');
 
-// Inspector
-mix.js('src/resources/js/main.js', '/js/stackr.js')
+// Inspector JS
+mix.js('src/resources/js/inspector/main.js', '/js/stackr-inspector.js')
   .react();
 
-
-mix.postCss('src/resources/css/stackr.css', '/css/', [
+// Inspector CSS
+mix.postCss('src/resources/css/inspector.css', '/css/stackr-inspector.css', [
   require('postcss-import'),
   require('postcss-nested'),
   require('tailwindcss'),

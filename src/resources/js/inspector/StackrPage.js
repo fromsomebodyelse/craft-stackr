@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { eventDispatcher } from './dispatcher';
+import { eventDispatcher } from '../dispatcher';
 
 const defaultPageData = {
   url: null,
@@ -31,8 +31,10 @@ const StackrPageContextProvider = ({children}) => {
   }
 
   useEffect(() => {
-    const iframe = document.querySelector('iframe#stackr-page').contentWindow;
-    const host = dispatcher.current = eventDispatcher(iframe, 'stackr-inspector');
+    const iframe = document.querySelector('iframe#stackr-page');
+    if (!iframe) return;
+
+    const host = dispatcher.current = eventDispatcher(iframe.contentWindow, 'stackr-inspector');
 
     // 1. Wait for the Host to indicate that the inspector can connect.
     host.on('STACKR_HOST_READY', (data) => {

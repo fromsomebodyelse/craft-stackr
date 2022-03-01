@@ -202,10 +202,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function highlightInstance(id) {
   var highlight = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  var scrollIntoView = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
   var el = document.querySelector("[data-stackr-component=\"".concat(id, "\"]"));
 
   if (el) {
-    if (highlight) el.scrollIntoView({
+    if (scrollIntoView && highlight) el.scrollIntoView({
       block: 'center',
       behavior: 'smooth'
     });
@@ -217,7 +218,7 @@ function decorateInstance(id, el, dispatcher) {
   var data = window.stackrComponents[el.getAttribute('data-stackr-component')];
   var stackrDiv = document.createElement('div');
   el.addEventListener('mouseover', function (e) {
-    highlightInstance(id);
+    highlightInstance(id, true, false);
     dispatcher.dispatch('STACKR_INSTANCE_MOUSE_OVER', id);
   });
   el.addEventListener('mouseout', function (e) {
@@ -229,10 +230,13 @@ function decorateInstance(id, el, dispatcher) {
   return el;
 }
 
-(function () {
-  var dispatcher = (0,_dispatcher__WEBPACK_IMPORTED_MODULE_0__.eventDispatcher)(window.parent, "stackr-preview");
-  var instances = Object.keys(window.stackrComponents).map(function (key) {
-    var el = decorateInstance(key, document.querySelector("[data-stackr-component=\"".concat(key, "\"]")), dispatcher);
+function getInstances(inspector) {
+  // Listen for events from the inspector.
+  inspector.on('STACKR_HIGHLIGHT_INSTANCE', function (obj) {
+    highlightInstance(obj.id, obj.highlight);
+  });
+  return Object.keys(window.stackrComponents).map(function (key) {
+    var el = decorateInstance(key, document.querySelector("[data-stackr-component=\"".concat(key, "\"]")), inspector);
     return _objectSpread(_objectSpread({
       id: key
     }, window.stackrComponents[key]), {}, {
@@ -240,15 +244,24 @@ function decorateInstance(id, el, dispatcher) {
       parent: (0,_utils__WEBPACK_IMPORTED_MODULE_1__.getComponentParent)(el),
       children: (0,_utils__WEBPACK_IMPORTED_MODULE_1__.getComponentChildren)(el)
     });
-  }); // Listen for events from the inspector.
-
-  dispatcher.on('STACKR_HIGHLIGHT_INSTANCE', function (obj) {
-    highlightInstance(obj.id, obj.highlight);
   });
-  console.log('%c Stackr!2', 'background: #222; color: #bada55');
-  dispatcher.dispatch('STACKR_INIT_PAGE', {
-    url: document.location.href,
-    instances: instances
+}
+
+(function () {
+  var inspector = (0,_dispatcher__WEBPACK_IMPORTED_MODULE_0__.eventDispatcher)(window.parent, "stackr-inspector");
+  var url = document.location.href; // 1. Notify the inspector that we're ready.
+
+  console.log('Stackr-Host: Sending host ready message...');
+  inspector.dispatch('STACKR_HOST_READY', {
+    url: url
+  });
+  console.log('Stackr-Host: Waiting for inspector to connect...'); // 2. Wait for the Inspector to start.
+
+  inspector.on('STACKR_INSPECTOR_CONNECT', function () {
+    inspector.dispatch('STACKR_HOST_CONNECTED', {
+      url: url,
+      instances: getInstances(inspector)
+    });
   });
 })();
 })();

@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from "react";
 import { StackrPageContext } from "./StackrPage";
-import { InspectorContext } from "./main";
+import { InspectorContext } from './Inspector';
 
 const ComponentsList = () => {
   const {instances, mouseOver, actions} = useContext(StackrPageContext);
