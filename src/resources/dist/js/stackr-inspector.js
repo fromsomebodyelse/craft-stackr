@@ -346,18 +346,11 @@ var ComponentDetailDescription = function ComponentDetailDescription(_ref4) {
       className: "max-height-[0px] text-sm opacity-0 overflow-hidden transition-all duration-500",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
         children: component.description
-      }), component.notes && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-          className: "mt-3 py-1 w-full text-sm font-bold",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_heroicons_react_solid__WEBPACK_IMPORTED_MODULE_0__.PencilAltIcon, {
-            className: "inline-block text-gray-500 mr-1 w-4 h-4"
-          }), " Notes"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-          className: "mt-2 text-sm prose",
-          dangerouslySetInnerHTML: {
-            __html: component.notes
-          }
-        })]
+      }), component.notes && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        className: "mt-2 text-sm prose",
+        dangerouslySetInnerHTML: {
+          __html: component.notes
+        }
       })]
     })]
   });
@@ -461,7 +454,7 @@ var ComponentDetails = function ComponentDetails(_ref6) {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "flex text-sm text-gray-600 gap-x-1",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-                className: "flex gap-x-2 font-bold cursor-default",
+                className: "flex gap-x-1 cursor-default",
                 "data-tip": true,
                 "data-for": "param-".concat(param.name),
                 children: [param.name, hasTooltip && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {

@@ -89,12 +89,7 @@ const ComponentDetailDescription = ({component}) => {
       <div ref={fullDesc} className="max-height-[0px] text-sm opacity-0 overflow-hidden transition-all duration-500">
         <p>{component.description}</p>
         {component.notes && (
-          <>
-            <div className="mt-3 py-1 w-full text-sm font-bold">
-              <PencilAltIcon className="inline-block text-gray-500 mr-1 w-4 h-4" /> Notes
-            </div>
-            <p className="mt-2 text-sm prose" dangerouslySetInnerHTML={{__html:component.notes}}></p>
-          </>
+          <p className="mt-2 text-sm prose" dangerouslySetInnerHTML={{__html:component.notes}}></p>
         )}
       </div>
     </div>
@@ -164,7 +159,7 @@ const ComponentDetails = ({instance}) => {
               return (
                 <div className="px-1" key={i}>
                   <div key={i} className="flex text-sm text-gray-600 gap-x-1">
-                    <div className="flex gap-x-2 font-bold cursor-default" data-tip data-for={`param-${param.name}`}>{param.name}
+                    <div className="flex gap-x-1 cursor-default" data-tip data-for={`param-${param.name}`}>{param.name}
                       {hasTooltip && (
                         <>
                           <div className="flex items-center w-5 h-5">
