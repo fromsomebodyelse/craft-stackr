@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useRef, useState } from "react";
 import { StackrPageContext } from "./StackrPage";
 import { InspectorContext } from './Inspector';
-import { HashtagIcon, SearchIcon } from '@heroicons/react/solid'
+import { HashtagIcon } from '@heroicons/react/solid'
 
 
 const ComponentListItem = ({instance, allInstances}) => {
@@ -25,15 +25,15 @@ const ComponentListItem = ({instance, allInstances}) => {
 
   return (
     <React.Fragment>
-      <div className={`flex justify-between items-center px-4 py-2 ${bgColor} cursor-pointer ${depthClassName} shadow-sm rounded-sm hover:bg-blue-300`} key={instance.id}
+      <div className={`flex items-center gap-x-2 pl-2 pr-4 py-2 ${bgColor} cursor-pointer ${depthClassName} shadow-sm rounded-sm hover:bg-blue-300`} key={instance.id}
         onMouseOver={(e) => handleMouseOver(instance)}
         onMouseOut={(e) => handleMouseOut(instance)}
         onClick={(e) => handleClick(instance)}
       >
-        <div className="text-sm">{instance.component}</div>
-        <div>
-          <SearchIcon className="w-4 h-4" />
+        <div class="flex-shrink-0 w-5 h-5">
+          <img src="https://timber.fsedev/block-article-list.png" className="h-auto w-full rounded-sm" />
         </div>
+        <div className="text-sm whitespace-nowrap overflow-hidden text-ellipsis">{instance.component}</div>
       </div>
 
       {children.map(child =>

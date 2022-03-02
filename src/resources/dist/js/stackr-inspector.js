@@ -259,26 +259,35 @@ var ObjValue = function ObjValue(_ref2) {
   });
 };
 
+var isEmptyValue = function isEmptyValue(param) {
+  return param.value === '';
+};
+
 var PropertyValue = function PropertyValue(_ref3) {
   var param = _ref3.param;
   var val = null;
 
-  if (isJsonValue(param)) {
-    val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ObjValue, {
-      value: param.value
-    });
-  } else if (isNullValue(param)) {
+  if (isNullValue(param)) {
     val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
       className: "text-gray-500",
       children: "Not Set"
+    });
+  } else if (isJsonValue(param)) {
+    val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ObjValue, {
+      value: param.value
     });
   } else if (isUrlValue(param)) {
     val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(UrlValue, {
       value: param.value
     });
+  } else if (isEmptyValue(param)) {
+    val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+      className: "text-gray-500",
+      children: "Not Set"
+    });
   } else {
     val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-      children: param.value
+      children: param.value || 'N\A'
     });
   }
 
@@ -292,18 +301,10 @@ var ComponentThumb = function ComponentThumb() {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
     className: "border border-gray-400 rounded-md overflow-hidden",
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-      className: "w-full px-2 py-2 aspect-square bg-white text-gray-400",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
-        className: "h-auto w-full",
-        fill: "none",
-        viewBox: "0 0 24 24",
-        stroke: "currentColor",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeWidth: "2",
-          d: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-        })
+      className: "w-full aspect-square bg-white text-gray-400",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
+        src: "https://timber.fsedev/block-article-list.png",
+        className: "h-auto w-full"
       })
     })
   });
@@ -320,6 +321,16 @@ var ComponentDetails = function ComponentDetails(_ref4) {
       component = _useState2[0],
       setComponent = _useState2[1];
 
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
+      _useState4 = _slicedToArray(_useState3, 2),
+      isScrolled = _useState4[0],
+      setIsScrolled = _useState4[1];
+
+  var containerRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  var headerShadow = isScrolled ? 'shadow-lg' : 'shadow-none';
+  var handleScroll = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(function (e) {
+    setIsScrolled(containerRef.current.scrollTop > 8);
+  });
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     if (instance) {
       (0,_fetchComponentSchema__WEBPACK_IMPORTED_MODULE_2__.fetchComponentSchema)(instance).then(function (data) {
@@ -330,9 +341,13 @@ var ComponentDetails = function ComponentDetails(_ref4) {
     }
   }, [instance]);
   return component && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+    ref: containerRef,
     className: "relative details-window bg-gray-100",
+    onScroll: function onScroll(e) {
+      return handleScroll(e);
+    },
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("header", {
-      className: "sticky top-0 px-4 py-4 bg-gray-100 border-b border-gray-300",
+      className: "sticky top-0 px-4 py-4 bg-gray-100 border-b border-gray-300 transition-shadow ".concat(headerShadow),
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
         className: "mb-2",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
@@ -352,22 +367,22 @@ var ComponentDetails = function ComponentDetails(_ref4) {
           })
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-        className: "flex",
+        className: "flex items-end",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "w-full max-w-[60px]",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ComponentThumb, {
             component: component
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "mt-2 ml-4",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-            className: "text-xl",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+            className: "text-xl leading-6",
             children: component.name
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-            className: "text-sm",
-            children: component.description
-          })]
+          })
         })]
+      }), component.description && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        className: "mt-3 text-sm",
+        children: component.description
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
       className: "flex flex-col gap-y-3 mb-16 mt-4 px-2 ",
@@ -376,12 +391,12 @@ var ComponentDetails = function ComponentDetails(_ref4) {
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "px-2",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            className: "flex text-sm text-gray-600 gap-x-2",
+            className: "flex text-sm text-gray-600 gap-x-1",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
               className: "flex gap-x-2 font-bold cursor-default",
               "data-tip": true,
               "data-for": "param-".concat(param.name),
-              children: [param.name, ":", hasTooltip && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
+              children: [param.name, hasTooltip && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                   className: "flex items-center w-5 h-5",
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_heroicons_react_solid__WEBPACK_IMPORTED_MODULE_0__.InformationCircleIcon, {
@@ -479,7 +494,7 @@ var ComponentListItem = function ComponentListItem(_ref) {
   });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-      className: "flex justify-between items-center px-4 py-2 ".concat(bgColor, " cursor-pointer ").concat(depthClassName, " shadow-sm rounded-sm hover:bg-blue-300"),
+      className: "flex items-center gap-x-2 pl-2 pr-4 py-2 ".concat(bgColor, " cursor-pointer ").concat(depthClassName, " shadow-sm rounded-sm hover:bg-blue-300"),
       onMouseOver: function onMouseOver(e) {
         return handleMouseOver(instance);
       },
@@ -490,12 +505,14 @@ var ComponentListItem = function ComponentListItem(_ref) {
         return handleClick(instance);
       },
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-        className: "text-sm",
-        children: instance.component
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_heroicons_react_solid__WEBPACK_IMPORTED_MODULE_3__.SearchIcon, {
-          className: "w-4 h-4"
+        "class": "flex-shrink-0 w-5 h-5",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+          src: "https://timber.fsedev/block-article-list.png",
+          className: "h-auto w-full rounded-sm"
         })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        className: "text-sm whitespace-nowrap overflow-hidden text-ellipsis",
+        children: instance.component
       })]
     }, instance.id), children.map(function (child) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(ComponentListItem, {
