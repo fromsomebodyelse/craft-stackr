@@ -4,10 +4,33 @@ const createComponentModal = (instance, schema) => {
     name: schema.name,
     description: schema.description,
     parameters: Object.keys(schema.attributes).map((name) => {
-      const description = schema.attributes[name];
+      const definition = schema.attributes[name];
       const value = instance.arguments[name] ?? null;
-      return {name, description, value}
+      return parseParameter(name, definition, value);
     }),
+  };
+}
+
+
+/**
+ * Parses a parameter object returned from the server.
+ */
+const parseParameter = (name, definition, value = null) => {
+  // Shorthand for an attribute is "name: description as string"
+  if (typeof definition === 'string') {
+    return {name, description: definition, type: null, value};
+  }
+
+  if (!definition) {
+    return {name, description: '', type: null, value};
+  }
+
+  // Longhand is an object containing description, desc, and type
+  return {
+    name,
+    description: 'desc' in definition ? definition.desc : definition.description || '',
+    type: definition.type || null,
+    value,
   };
 }
 

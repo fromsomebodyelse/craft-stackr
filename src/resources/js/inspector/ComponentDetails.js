@@ -1,7 +1,20 @@
+import { InformationCircleIcon } from '@heroicons/react/solid';
 import React, { useContext, useEffect, useState } from 'react';
 import { fetchComponentSchema } from "../fetchComponentSchema";
 import { InspectorContext } from './Inspector';
+import ReactTooltip from "react-tooltip";
 
+const isUrlValue = (param) => (
+  ['url', 'src', 'href'].includes(param.name.toLowerCase()) && typeof param.value === 'string'
+);
+
+const isNullValue = (param) => {
+  return param.value === null;
+}
+
+const isJsonValue = (param) => {
+  return typeof param.value === 'object';
+}
 
 const UrlValue = ({value}) => {
   return <a className="text-blue-400 whitespace-nowrap overflow-ellipsis" href="value" target="_blank">{value}</a>;
@@ -11,18 +24,17 @@ const ObjValue = ({value}) => {
   return <pre>{JSON.stringify(value, null, 2)}</pre>;
 }
 
-const PropertyValue = ({component, param}) => {
+const PropertyValue = ({param}) => {
+  let val = null;
 
-  let val = <span>{param.value}</span>;
-
-  if (typeof param.value === 'object') {
+  if (isJsonValue(param)) {
     val =  <ObjValue value={param.value} />;
-  }
-
-  if (param.value === null) {
+  } else if (isNullValue(param)) {
     val = <span className="text-gray-500">Not Set</span>;
-  } else if (param.name === 'url' && typeof param.value === 'string') {
+  } else if (isUrlValue(param)) {
     val = <UrlValue value={param.value} />;
+  } else {
+    val = <span>{param.value}</span>;
   }
 
   return (
@@ -79,15 +91,32 @@ const ComponentDetails = ({instance}) => {
       </header>
 
       <div className="flex flex-col gap-y-3 mb-16 mt-4 px-2 ">
-        {component.parameters.map((param, i) => (
+        {component.parameters.map((param, i) => {
+          const hasTooltip = param.description || param.type;
+
+          return (
             <div className="px-2" key={i}>
-              <div className="flex text-sm gap-x-2">
-                <div className="font-bold text-gray-600">{param.name}:</div>
-                <div className="text-gray-500">{param.description}</div>
+              <div className="flex text-sm text-gray-600 gap-x-2">
+                <div className="flex gap-x-2 font-bold cursor-default" data-tip data-for={`param-${param.name}`}>{param.name}:
+                  {hasTooltip && (
+                    <>
+                      <div className="flex items-center w-5 h-5">
+                        <InformationCircleIcon className="block w-4 h-4 text-gray-400" />
+                      </div>
+                      <ReactTooltip id={`param-${param.name}`} place="left" effect="solid">
+                        <div className="text-gray-300">
+                          <p className="text-sm">{param.description}</p>
+                          {param.type && <div className="mt-1 font-mono text-xs rounded-sm text-blue-400">{param.type}</div>}
+                        </div>
+                      </ReactTooltip>
+                    </>
+                  )}
+                </div>
               </div>
-              <PropertyValue {...{param, component}} />
+              <PropertyValue {...{param}} />
             </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
