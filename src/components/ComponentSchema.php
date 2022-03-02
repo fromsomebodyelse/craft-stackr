@@ -14,6 +14,10 @@ class ComponentSchema {
 
         // TODO: Validate schema
         $this->schema = $schema;
+
+        if (array_key_exists('notes', $this->schema)) {
+            $this->schema['notes'] = (new \Parsedown())->text($this->schema['notes']);
+        }
     }
 
     public function getName()
@@ -36,7 +40,9 @@ class ComponentSchema {
 		return [
             'name'=> $this->getName(),
             'description'=> $this->getDescription(),
-            'attributes'=> $this->getAttributes()
+            'attributes'=> $this->getAttributes(),
+            'notes' => $this->schema['notes'] ?? null,
+            'example' => $this->schema['example'] ?? null,
         ];
 	}
 }

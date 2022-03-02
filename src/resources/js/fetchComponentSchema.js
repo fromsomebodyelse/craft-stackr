@@ -3,6 +3,8 @@ const createComponentModal = (instance, schema) => {
     instance,
     name: schema.name,
     description: schema.description,
+    notes: schema.notes || null,
+    example: schema.example || null,
     parameters: Object.keys(schema.attributes).map((name) => {
       const definition = schema.attributes[name];
       const value = instance.arguments[name] ?? null;

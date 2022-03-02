@@ -30,10 +30,10 @@ const ComponentListItem = ({instance, allInstances}) => {
         onMouseOut={(e) => handleMouseOut(instance)}
         onClick={(e) => handleClick(instance)}
       >
-        <div class="flex-shrink-0 w-5 h-5">
+        <div className="flex-shrink-0 w-5 h-5">
           <img src="https://timber.fsedev/block-article-list.png" className="h-auto w-full rounded-sm" />
         </div>
-        <div className="text-sm whitespace-nowrap overflow-hidden text-ellipsis">{instance.component}</div>
+        <div className="text-sm truncate">{instance.component}</div>
       </div>
 
       {children.map(child =>

@@ -96,6 +96,8 @@ var createComponentModal = function createComponentModal(instance, schema) {
     instance: instance,
     name: schema.name,
     description: schema.description,
+    notes: schema.notes || null,
+    example: schema.example || null,
     parameters: Object.keys(schema.attributes).map(function (name) {
       var _instance$arguments$n;
 
@@ -310,21 +312,87 @@ var ComponentThumb = function ComponentThumb() {
   });
 };
 
-var ComponentDetails = function ComponentDetails(_ref4) {
-  var instance = _ref4.instance;
+var ComponentDetailDescription = function ComponentDetailDescription(_ref4) {
+  var component = _ref4.component;
+
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      showMore = _useState2[0],
+      setShowMore = _useState2[1];
+
+  var fullDesc = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  var shortDesc = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  var handleClick = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(function () {
+    setShowMore(!showMore);
+  });
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    shortDesc.current.style.display = !showMore ? 'block' : 'none';
+    fullDesc.current.style.opacity = showMore ? 1 : 0;
+    fullDesc.current.style.maxHeight = showMore ? '1000px' : 0;
+  }, [showMore]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+    className: "mt-3 cursor-default text-sm",
+    onClick: function onClick(e) {
+      return handleClick(e);
+    },
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+      ref: shortDesc,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        className: "truncate",
+        children: component.description.slice(0, 100)
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      ref: fullDesc,
+      className: "max-height-[0px] text-sm opacity-0 overflow-hidden transition-all duration-500",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        children: component.description
+      }), component.notes && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+          className: "mt-3 py-1 w-full text-sm font-bold",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_heroicons_react_solid__WEBPACK_IMPORTED_MODULE_0__.PencilAltIcon, {
+            className: "inline-block text-gray-500 mr-1 w-4 h-4"
+          }), " Notes"]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+          className: "mt-2 text-sm prose",
+          dangerouslySetInnerHTML: {
+            __html: component.notes
+          }
+        })]
+      })]
+    })]
+  });
+};
+
+var ComponentDetailSection = function ComponentDetailSection(_ref5) {
+  var title = _ref5.title,
+      children = _ref5.children;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+    className: "relative pb-8",
+    children: [title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+      className: "px-4 py-1 w-full text-sm font-bold border-b border-gray-300",
+      children: title
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+      className: "px-2",
+      children: children
+    })]
+  });
+};
+
+var ComponentDetails = function ComponentDetails(_ref6) {
+  var instance = _ref6.instance;
 
   var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(_Inspector__WEBPACK_IMPORTED_MODULE_3__.InspectorContext),
       setCurInstance = _useContext.setCurInstance;
 
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
-      _useState2 = _slicedToArray(_useState, 2),
-      component = _useState2[0],
-      setComponent = _useState2[1];
-
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
       _useState4 = _slicedToArray(_useState3, 2),
-      isScrolled = _useState4[0],
-      setIsScrolled = _useState4[1];
+      component = _useState4[0],
+      setComponent = _useState4[1];
+
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      isScrolled = _useState6[0],
+      setIsScrolled = _useState6[1];
 
   var containerRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
   var headerShadow = isScrolled ? 'shadow-lg' : 'shadow-none';
@@ -342,12 +410,12 @@ var ComponentDetails = function ComponentDetails(_ref4) {
   }, [instance]);
   return component && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     ref: containerRef,
-    className: "relative details-window bg-gray-100",
+    className: "relative details-window pb-16 bg-gray-100",
     onScroll: function onScroll(e) {
       return handleScroll(e);
     },
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("header", {
-      className: "sticky top-0 px-4 py-4 bg-gray-100 border-b border-gray-300 transition-shadow ".concat(headerShadow),
+      className: "sticky top-0 z-10 px-4 py-4 bg-gray-100 border-b border-gray-300 transition-shadow ".concat(headerShadow),
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
         className: "mb-2",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
@@ -380,49 +448,61 @@ var ComponentDetails = function ComponentDetails(_ref4) {
             children: component.name
           })
         })]
-      }), component.description && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-        className: "mt-3 text-sm",
-        children: component.description
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ComponentDetailDescription, {
+        component: component
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-      className: "flex flex-col gap-y-3 mb-16 mt-4 px-2 ",
-      children: component.parameters.map(function (param, i) {
-        var hasTooltip = param.description || param.type;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-          className: "px-2",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            className: "flex text-sm text-gray-600 gap-x-1",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-              className: "flex gap-x-2 font-bold cursor-default",
-              "data-tip": true,
-              "data-for": "param-".concat(param.name),
-              children: [param.name, hasTooltip && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-                  className: "flex items-center w-5 h-5",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_heroicons_react_solid__WEBPACK_IMPORTED_MODULE_0__.InformationCircleIcon, {
-                    className: "block w-4 h-4 text-gray-400"
-                  })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_tooltip__WEBPACK_IMPORTED_MODULE_4__["default"], {
-                  id: "param-".concat(param.name),
-                  place: "left",
-                  effect: "solid",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-                    className: "text-gray-300",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-                      className: "text-sm",
-                      children: param.description
-                    }), param.type && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-                      className: "mt-1 font-mono text-xs rounded-sm text-blue-400",
-                      children: param.type
-                    })]
-                  })
+    }), component.parameters && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ComponentDetailSection, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        className: "flex flex-col gap-y-3 mt-4 px-2",
+        children: component.parameters.map(function (param, i) {
+          var hasTooltip = param.description || param.type;
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+            className: "px-1",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+              className: "flex text-sm text-gray-600 gap-x-1",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+                className: "flex gap-x-2 font-bold cursor-default",
+                "data-tip": true,
+                "data-for": "param-".concat(param.name),
+                children: [param.name, hasTooltip && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                    className: "flex items-center w-5 h-5",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_heroicons_react_solid__WEBPACK_IMPORTED_MODULE_0__.InformationCircleIcon, {
+                      className: "block w-4 h-4 text-gray-400"
+                    })
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_tooltip__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                    id: "param-".concat(param.name),
+                    place: "left",
+                    effect: "solid",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+                      className: "text-gray-300",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+                        className: "text-sm",
+                        children: param.description
+                      }), param.type && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                        className: "mt-1 font-mono text-xs rounded-sm text-blue-400",
+                        children: param.type
+                      })]
+                    })
+                  })]
                 })]
-              })]
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(PropertyValue, {
-            param: param
-          })]
-        }, i);
+              })
+            }, i), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(PropertyValue, {
+              param: param
+            })]
+          }, i);
+        })
+      })
+    }), component.example && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ComponentDetailSection, {
+      title: "Example",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        className: "mt-2 px-2 py-2 bg-white border rounded-md shadow-sm text-sm overflow-x-scroll",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("pre", {
+          className: "mt-3 text-sm",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("code", {
+            children: component.example
+          })
+        })
       })
     })]
   });
@@ -505,13 +585,13 @@ var ComponentListItem = function ComponentListItem(_ref) {
         return handleClick(instance);
       },
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-        "class": "flex-shrink-0 w-5 h-5",
+        className: "flex-shrink-0 w-5 h-5",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
           src: "https://timber.fsedev/block-article-list.png",
           className: "h-auto w-full rounded-sm"
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-        className: "text-sm whitespace-nowrap overflow-hidden text-ellipsis",
+        className: "text-sm truncate",
         children: instance.component
       })]
     }, instance.id), children.map(function (child) {

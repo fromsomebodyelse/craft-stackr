@@ -1,4 +1,4 @@
-import { InformationCircleIcon } from '@heroicons/react/solid';
+import { InformationCircleIcon, PencilAltIcon } from '@heroicons/react/solid';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { fetchComponentSchema } from "../fetchComponentSchema";
 import { InspectorContext } from './Inspector';
@@ -63,6 +63,57 @@ const ComponentThumb = () => {
   );
 }
 
+const ComponentDetailDescription = ({component}) => {
+  const [showMore, setShowMore] = useState(false);
+  const fullDesc = useRef(null);
+  const shortDesc = useRef(null);
+
+  const handleClick = useCallback(() => {
+    setShowMore(!showMore);
+  });
+
+  useEffect(() => {
+    shortDesc.current.style.display = !showMore ? 'block' : 'none';
+    fullDesc.current.style.opacity = showMore ? 1 : 0;
+    fullDesc.current.style.maxHeight = showMore ? '1000px' : 0;
+  }, [showMore]);
+
+  return (
+    <div className="mt-3 cursor-default text-sm" onClick={(e) => handleClick(e)}>
+      {/* Short Description */}
+      <div ref={shortDesc}>
+        <p className="truncate">{component.description.slice(0, 100)}</p>
+      </div>
+
+      {/* Long Description */}
+      <div ref={fullDesc} className="max-height-[0px] text-sm opacity-0 overflow-hidden transition-all duration-500">
+        <p>{component.description}</p>
+        {component.notes && (
+          <>
+            <div className="mt-3 py-1 w-full text-sm font-bold">
+              <PencilAltIcon className="inline-block text-gray-500 mr-1 w-4 h-4" /> Notes
+            </div>
+            <p className="mt-2 text-sm prose" dangerouslySetInnerHTML={{__html:component.notes}}></p>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const ComponentDetailSection = ({title, children}) => {
+  return (
+    <div className="relative pb-8">
+      {title && (
+        <div className="px-4 py-1 w-full text-sm font-bold border-b border-gray-300">{title}</div>
+      )}
+      <div className="px-2">
+        {children}
+      </div>
+    </div>
+  );
+}
+
 
 const ComponentDetails = ({instance}) => {
   const {setCurInstance} = useContext(InspectorContext);
@@ -84,8 +135,8 @@ const ComponentDetails = ({instance}) => {
   }, [instance]);
 
   return component && (
-    <div ref={containerRef} className="relative details-window bg-gray-100" onScroll={(e) => handleScroll(e)}>
-      <header className={`sticky top-0 px-4 py-4 bg-gray-100 border-b border-gray-300 transition-shadow ${headerShadow}`}>
+    <div ref={containerRef} className="relative details-window pb-16 bg-gray-100" onScroll={(e) => handleScroll(e)}>
+      <header className={`sticky top-0 z-10 px-4 py-4 bg-gray-100 border-b border-gray-300 transition-shadow ${headerShadow}`}>
         <div className="mb-2">
           <button className="" onClick={(e) => setCurInstance(null)}>
             <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -101,37 +152,49 @@ const ComponentDetails = ({instance}) => {
             <p className="text-xl leading-6">{component.name}</p>
           </div>
         </div>
-        {component.description && <p className="mt-3 text-sm">{component.description}</p>}
+        <ComponentDetailDescription {...{component}} />
       </header>
 
-      <div className="flex flex-col gap-y-3 mb-16 mt-4 px-2 ">
-        {component.parameters.map((param, i) => {
-          const hasTooltip = param.description || param.type;
+      {component.parameters && (
+        <ComponentDetailSection>
+          <div className="flex flex-col gap-y-3 mt-4 px-2">
+            {component.parameters.map((param, i) => {
+              const hasTooltip = param.description || param.type;
 
-          return (
-            <div className="px-2" key={i}>
-              <div className="flex text-sm text-gray-600 gap-x-1">
-                <div className="flex gap-x-2 font-bold cursor-default" data-tip data-for={`param-${param.name}`}>{param.name}
-                  {hasTooltip && (
-                    <>
-                      <div className="flex items-center w-5 h-5">
-                        <InformationCircleIcon className="block w-4 h-4 text-gray-400" />
-                      </div>
-                      <ReactTooltip id={`param-${param.name}`} place="left" effect="solid">
-                        <div className="text-gray-300">
-                          <p className="text-sm">{param.description}</p>
-                          {param.type && <div className="mt-1 font-mono text-xs rounded-sm text-blue-400">{param.type}</div>}
-                        </div>
-                      </ReactTooltip>
-                    </>
-                  )}
+              return (
+                <div className="px-1" key={i}>
+                  <div key={i} className="flex text-sm text-gray-600 gap-x-1">
+                    <div className="flex gap-x-2 font-bold cursor-default" data-tip data-for={`param-${param.name}`}>{param.name}
+                      {hasTooltip && (
+                        <>
+                          <div className="flex items-center w-5 h-5">
+                            <InformationCircleIcon className="block w-4 h-4 text-gray-400" />
+                          </div>
+                          <ReactTooltip id={`param-${param.name}`} place="left" effect="solid">
+                            <div className="text-gray-300">
+                              <p className="text-sm">{param.description}</p>
+                              {param.type && <div className="mt-1 font-mono text-xs rounded-sm text-blue-400">{param.type}</div>}
+                            </div>
+                          </ReactTooltip>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <PropertyValue {...{param}} />
                 </div>
-              </div>
-              <PropertyValue {...{param}} />
-            </div>
-          );
-        })}
-      </div>
+              );
+            })}
+          </div>
+        </ComponentDetailSection>
+      )}
+
+      {component.example && (
+        <ComponentDetailSection title="Example">
+          <div className="mt-2 px-2 py-2 bg-white border rounded-md shadow-sm text-sm overflow-x-scroll">
+            <pre className="mt-3 text-sm"><code>{component.example}</code></pre>
+          </div>
+        </ComponentDetailSection>
+      )}
     </div>
   );
 }

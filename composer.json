@@ -18,7 +18,8 @@
     },
     "require": {
       "craftcms/cms": "^3.1.0",
-      "mnapoli/front-yaml": "^2.0"
+      "mnapoli/front-yaml": "^2.0",
+        "erusev/parsedown": "^1.7"
     },
     "autoload": {
       "psr-4": {
@@ -29,5 +30,11 @@
       "name": "Stackr",
       "handle": "stackr",
       "class": "fse\\stackr\\Stackr"
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
     }
-  }
+}
