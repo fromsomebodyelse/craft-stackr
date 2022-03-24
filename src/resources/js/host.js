@@ -11,6 +11,12 @@ function highlightInstance(id, highlight = true, scrollIntoView = true) {
 }
 
 function decorateInstance(id, el, dispatcher) {
+
+  if (!el) {
+    console.warn('decorateInstance: no element found for id', id);
+    return;
+  }
+
   const data = window.stackrComponents[el.getAttribute('data-stackr-component')];
   const stackrDiv = document.createElement('div');
 
@@ -44,14 +50,14 @@ function getInstances(inspector) {
       inspector
     );
 
-    return {
+    return !el ? null : {
       id: key,
       ...window.stackrComponents[key],
       depth: getComponentDepth(el),
       parent: getComponentParent(el),
       children: getComponentChildren(el),
     };
-  });
+  }).filter(c => c !== null);
 }
 
 

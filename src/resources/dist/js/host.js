@@ -215,6 +215,11 @@ function highlightInstance(id) {
 }
 
 function decorateInstance(id, el, dispatcher) {
+  if (!el) {
+    console.warn('decorateInstance: no element found for id', id);
+    return;
+  }
+
   var data = window.stackrComponents[el.getAttribute('data-stackr-component')];
   var stackrDiv = document.createElement('div');
   el.addEventListener('mouseover', function (e) {
@@ -237,13 +242,15 @@ function getInstances(inspector) {
   });
   return Object.keys(window.stackrComponents).map(function (key) {
     var el = decorateInstance(key, document.querySelector("[data-stackr-component=\"".concat(key, "\"]")), inspector);
-    return _objectSpread(_objectSpread({
+    return !el ? null : _objectSpread(_objectSpread({
       id: key
     }, window.stackrComponents[key]), {}, {
       depth: (0,_utils__WEBPACK_IMPORTED_MODULE_1__.getComponentDepth)(el),
       parent: (0,_utils__WEBPACK_IMPORTED_MODULE_1__.getComponentParent)(el),
       children: (0,_utils__WEBPACK_IMPORTED_MODULE_1__.getComponentChildren)(el)
     });
+  }).filter(function (c) {
+    return c !== null;
   });
 }
 

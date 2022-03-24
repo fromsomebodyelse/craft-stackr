@@ -33,7 +33,7 @@ const ComponentListItem = ({instance, allInstances}) => {
         <div className="flex-shrink-0 w-5 h-5">
           <img src="https://timber.fsedev/block-article-list.png" className="h-auto w-full rounded-sm" />
         </div>
-        <div className="text-sm truncate">{instance.component}</div>
+        <div className="text-xs truncate">{instance.component}</div>
       </div>
 
       {children.map(child =>

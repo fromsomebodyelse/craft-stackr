@@ -59,9 +59,7 @@ class Stackr extends Plugin
      */
     private function _registerTwigExtensions()
     {
-        if (Craft::$app->request->getIsSiteRequest()) {
-            Craft::$app->view->registerTwigExtension(new StackrExtension());
-        }
+        Craft::$app->view->registerTwigExtension(new StackrExtension());
 
         return $this;
     }
@@ -74,6 +72,7 @@ class Stackr extends Plugin
         Event::on(UrlManager::class, URLManager::EVENT_REGISTER_CP_URL_RULES,
             function(RegisterUrlRulesEvent $event) {
                 $event->rules['stackr'] = 'stackr/inspector/index';
+                $event->rules['stackr/examples'] = 'stackr/examples/index';
                 $event->rules['POST stackr/components'] = 'stackr/components/index';
             }
         );

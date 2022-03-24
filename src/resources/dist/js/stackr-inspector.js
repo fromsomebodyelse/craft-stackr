@@ -584,7 +584,7 @@ var ComponentListItem = function ComponentListItem(_ref) {
           className: "h-auto w-full rounded-sm"
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-        className: "text-sm truncate",
+        className: "text-xs truncate",
         children: instance.component
       })]
     }, instance.id), children.map(function (child) {
@@ -691,7 +691,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
 var defaultState = {
   curInstance: null,
   setCurInstance: null,
@@ -716,21 +715,14 @@ var Inspector = function Inspector() {
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(InspectorContext.Provider, {
     value: state,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-      className: "fixed top-0 left-0 w-screen h-screen bg-gray-700",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-        className: "absolute top-0 w-5/6 h-full",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Preview__WEBPACK_IMPORTED_MODULE_3__["default"], {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_StackrPage__WEBPACK_IMPORTED_MODULE_4__.StackrPage, {
-            url: url
-          })
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+      "class": "w-full h-16 border-2 border-green-500",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Preview__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("iframe", {
+          src: "/admin/stackr/examples?c=ui/button",
+          "class": "w-full h-full"
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-        className: "absolute top-0 right-0 w-1/6 h-full",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_ComponentsList__WEBPACK_IMPORTED_MODULE_2__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_ComponentDetails__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          instance: curInstance
-        })]
-      })]
+      })
     })
   });
 };
