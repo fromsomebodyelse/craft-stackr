@@ -23,21 +23,26 @@ class Stackr extends Plugin
     /**
      * @var ComponentService
      */
-    public $components;
+    public mixed $components;
 
-        /**
+    /**
      * @var SchemaService
      */
-    public $schema;
+    public mixed $schema;
 
-    public $hasCpSection = true;
+    /**
+     * @inheritdoc
+     */
+    public bool $hasCpSection = false;
 
+    /**
+     * @inheritDoc
+     */
     public function init()
     {
         parent::init();
 
         self::$plugin = $this;
-
 
         $this->_registerServices();
         $this->_registerSiteRoutes();
@@ -47,27 +52,24 @@ class Stackr extends Plugin
     /**
      * ...
      */
-    private function _registerServices()
+    private function _registerServices(): void
     {
         $this->components = new ComponentService();
         $this->schema = new SchemaService();
-        return $this;
     }
 
     /**
      * ...
      */
-    private function _registerTwigExtensions()
+    private function _registerTwigExtensions(): void
     {
         Craft::$app->view->registerTwigExtension(new StackrExtension());
-
-        return $this;
     }
 
     /**
-     * Registers CP routes.
+     * ...
      */
-    private function _registerSiteRoutes()
+    private function _registerSiteRoutes(): void
     {
         Event::on(UrlManager::class, URLManager::EVENT_REGISTER_CP_URL_RULES,
             function(RegisterUrlRulesEvent $event) {
@@ -76,8 +78,5 @@ class Stackr extends Plugin
                 $event->rules['POST stackr/components'] = 'stackr/components/index';
             }
         );
-
-        return $this;
     }
-
 }
