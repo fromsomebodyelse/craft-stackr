@@ -17,7 +17,7 @@
       "docs": "https://github.com/fromsomebodyelse/craft-stackr/blob/main/README.md"
     },
     "require": {
-      "craftcms/cms": "^3.1.0",
+      "craftcms/cms": "^4.2.0",
       "mnapoli/front-yaml": "^2.0",
         "erusev/parsedown": "^1.7"
     },
