@@ -14,12 +14,12 @@ use Twig\TwigFunction;
 class StackrExtension extends AbstractExtension
 {
 
-    public function getName()
+    public function getName(): string
     {
         return 'stackr';
     }
 
-    public function getTokenParsers()
+    public function getTokenParsers(): array
     {
         return [
             new StackrComponentTokenParser(),
@@ -27,7 +27,7 @@ class StackrExtension extends AbstractExtension
         ];
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('stackr',
@@ -39,15 +39,8 @@ class StackrExtension extends AbstractExtension
         ];
     }
 
-   public function getNodeVisitors()
-   {
-       return [
-            new StackrVisitor(),
-        ];
-   }
-
-   public function renderComponentJs()
-   {
+    public function renderComponentJs(): string
+    {
         if (!Craft::$app->getConfig()->general->devMode) {
             return '';
         }
@@ -64,5 +57,5 @@ class StackrExtension extends AbstractExtension
         $html .= '<script src="' . Craft::$app->getAssetManager()->getPublishedUrl('@fse/stackr/resources/dist/js/host.js', true) . '"></script>';
 
         return $html;
-   }
+    }
 }
