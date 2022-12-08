@@ -8,6 +8,7 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\web\UrlManager;
 use craft\web\View;
+use craft\web\twig\variables\CraftVariable;
 use fse\stackr\twig\StackrExtension;
 use fse\stackr\services\ComponentService;
 use fse\stackr\services\SchemaService;
@@ -47,6 +48,14 @@ class Stackr extends Plugin
         $this->_registerServices();
         $this->_registerSiteRoutes();
         $this->_registerTwigExtensions();
+
+        Event::on(
+            CraftVariable::class,
+            CraftVariable::EVENT_DEFINE_BEHAVIORS,
+            function(Event $e) {
+                $e->sender->set('stackrSchema', SchemaService::class);
+            }
+        );
     }
 
     /**

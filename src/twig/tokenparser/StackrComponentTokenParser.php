@@ -25,7 +25,7 @@ class StackrComponentTokenParser extends AbstractTokenParser
 
 		$defaultValues = null;
 
-		if ($stream->nextIf(TwigToken::NAME_TYPE, 'default')) {
+		if ($stream->nextIf(TwigToken::NAME_TYPE, ['props', 'default'])) {
 			$defaultValues = $parser->getExpressionParser()->parseExpression();
 		}
 

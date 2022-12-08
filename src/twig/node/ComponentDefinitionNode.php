@@ -33,7 +33,10 @@ class ComponentDefinitionNode extends TwigNode
 
 		if ($this->hasNode('defaultValues')) {
 			$compiler->write('$defaultValues = ')->subcompile($this->getNode('defaultValues'))->raw(";\n");
-			$compiler->write('$context = array_merge($defaultValues, $context);');
+			$compiler->write('$props = new fse\stackr\components\ComponentProps($defaultValues)')->raw(";\n");
+			$compiler->write('$props->mergeValues($context)')->raw(";\n");
+			$compiler->write('$context["props"] = $props')->raw(";\n");
+			$compiler->write('$context = array_merge($defaultValues, $context);')->raw(";\n");
 		}
 
 		$compiler->subcompile($this->getNode('body'));
