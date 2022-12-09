@@ -5,7 +5,6 @@ namespace fse\stackr\twig;
 use fse\stackr\Stackr;
 use fse\stackr\twig\StackrVisitor;
 use fse\stackr\twig\tokenparser\StackrComponentTokenParser;
-use fse\stackr\twig\tokenparser\StackrRowTokenParser;
 
 use Craft;
 use Twig\Extension\AbstractExtension;
@@ -23,7 +22,6 @@ class StackrExtension extends AbstractExtension
     {
         return [
             new StackrComponentTokenParser(),
-            new StackrRowTokenParser(),
         ];
     }
 
