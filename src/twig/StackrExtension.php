@@ -3,7 +3,6 @@
 namespace fse\stackr\twig;
 
 use fse\stackr\Stackr;
-use fse\stackr\twig\StackrVisitor;
 use fse\stackr\twig\tokenparser\StackrComponentTokenParser;
 
 use Craft;
