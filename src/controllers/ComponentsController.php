@@ -10,8 +10,6 @@ use craft\web\Controller;
 
 class ComponentsController extends Controller
 {
-    protected $allowAnonymous = ['index'];
-
     public function actionIndex()
     {
         $this->requirePostRequest();

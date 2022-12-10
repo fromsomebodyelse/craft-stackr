@@ -10,8 +10,6 @@ use craft\web\Controller;
 
 class ExamplesController extends Controller
 {
-    protected $allowAnonymous = ['index'];
-
     public function actionIndex()
     {
         $schema = Stackr::$plugin->schema->parseSchema(Craft::$app->getRequest()->getQueryParam('c'));
