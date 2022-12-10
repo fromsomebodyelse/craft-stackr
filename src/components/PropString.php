@@ -3,6 +3,7 @@
 namespace fse\stackr\components;
 
 use Exception;
+use Stringable;
 use fse\stackr\components\ComponentProp;
 
 class PropString extends ComponentProp {
@@ -15,8 +16,10 @@ class PropString extends ComponentProp {
 
     public function test($value):bool
     {
-        if (!is_string($value)) {
-            throw new Exception('Stackr: value needs to be a string');
+        $isString = is_string($value) || $value instanceof Stringable;
+
+        if (!$isString) {
+            throw new Exception(sprintf('Stackr: "%s" value needs to be a string but received, "%s"', $this->name, get_class($value)));
         }
 
         return true;
