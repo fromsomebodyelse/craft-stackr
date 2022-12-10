@@ -62,7 +62,7 @@ class ComponentProp implements JsonSerializable {
 
     public function get():mixed
     {
-        return $this->value ?? $this->defaultValue;
+        return $this->value ?? $this->default;
     }
 
     public function test($value):bool
