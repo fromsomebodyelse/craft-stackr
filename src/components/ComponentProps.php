@@ -10,7 +10,7 @@ class ComponentProps implements JsonSerializable {
 
     private $props;
 
-    public function __construct($props)
+    public function __construct(array $props = [])
     {
         $this->props = $props;
 
