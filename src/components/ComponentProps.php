@@ -51,6 +51,17 @@ class ComponentProps implements JsonSerializable {
         }
     }
 
+    public function getValues()
+    {
+        $values = [];
+
+        foreach($this->props as $key=>$prop) {
+            $values[$key] = $prop->get();
+        };
+
+        return $values;
+    }
+
     public function jsonSerialize(): mixed
     {
         return $this->props;
