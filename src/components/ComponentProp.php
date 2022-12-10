@@ -6,12 +6,12 @@ use JsonSerializable;
 
 class ComponentProp implements JsonSerializable {
 
-    private $type;
-    private $name;
-    private $description;
-    private $default;
-    private $required;
-    private $value;
+    protected $type;
+    protected $name;
+    protected $description;
+    protected $default;
+    protected $required;
+    protected $value;
 
     public function __construct($type = 'Any')
     {
