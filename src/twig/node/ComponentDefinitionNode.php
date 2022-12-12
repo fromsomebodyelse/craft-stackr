@@ -13,7 +13,9 @@ class ComponentDefinitionNode extends TwigNode
 {
 	protected $parser;
 
-	public function __construct(TwigNode $body, TwigExpression $props = null, int $line, string $tag = null)
+	protected $componentName;
+
+	public function __construct(?string $name, TwigExpression $props = null, TwigNode $body, int $line, string $tag = null)
 	{
 		$nodes = ['body' => $body];
 
@@ -21,12 +23,18 @@ class ComponentDefinitionNode extends TwigNode
             $nodes['props'] = $props;
         }
 
+		$this->componentName = $name;
+
 		parent::__construct($nodes, [], $line, $tag);
 	}
 
 	public function compile(TwigCompiler $compiler)
 	{
 		$compiler->addDebugInfo($this);
+
+		if (!is_null($this->componentName)) {
+			$compiler->write('$context["stackr_comp_name"] = "' . $this->componentName)->raw("\";\n");
+		}
 
 		if ($this->hasNode('props')) {
 			$compiler->write('$propsObj = ')->subcompile($this->getNode('props'))->raw(";\n");

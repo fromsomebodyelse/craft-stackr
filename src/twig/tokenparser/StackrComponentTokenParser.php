@@ -22,11 +22,17 @@ class StackrComponentTokenParser extends AbstractTokenParser
         $lineNumber = $token->getLine();
 		$parser = $this->parser;
         $stream = $parser->getStream();
+		$curToken = $stream->getCurrent();
 
-		$defaultValues = null;
+		$name = null;
+		$props = null;
+
+		if ($stream->nextIf(TwigToken::STRING_TYPE)) {
+			$name = $curToken->getValue();
+		}
 
 		if ($stream->nextIf(TwigToken::NAME_TYPE, ['props', 'default'])) {
-			$defaultValues = $parser->getExpressionParser()->parseExpression();
+			$props = $parser->getExpressionParser()->parseExpression();
 		}
 
         $stream->expect(TwigToken::BLOCK_END_TYPE);
@@ -34,7 +40,7 @@ class StackrComponentTokenParser extends AbstractTokenParser
         $stream->expect(TwigToken::BLOCK_END_TYPE);
 
         // pass all parsed data to Node class.
-        return new ComponentDefinitionNode($body, $defaultValues, $lineNumber, $this->getTag());
+        return new ComponentDefinitionNode($name, $props, $body, $lineNumber, $this->getTag());
     }
 
 	public function decideEnd(TwigToken $token)
