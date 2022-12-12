@@ -6,7 +6,7 @@
 <body>
     <div id="stackr-root"></div>
     <script type="text/javascript">
-        window.inspectUrl = '{{ siteUrl('/') }}';
+        window.inspectUrl = '{{ siteUrl(craft.app.request.getParam('url') ?? '/') }}';
         window.csrfTokenName = '{{ token.name }}';
         window.csrfTokenValue = '{{ token.value }}';
     </script>
