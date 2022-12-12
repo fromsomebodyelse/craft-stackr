@@ -31,6 +31,8 @@ const isEmptyValue = (param) => {
 const PropertyValue = ({param}) => {
   let val = null;
 
+  console.log(param);
+
   if (isNullValue(param)) {
     val = <span className="text-gray-500">Not Set</span>;
   } else if (isJsonValue(param)) {
@@ -122,11 +124,7 @@ const ComponentDetails = ({instance}) => {
   });
 
   useEffect(() => {
-    if (instance) {
-      fetchComponentSchema(instance).then(data => setComponent(data));
-    } else {
-      setComponent(null);
-    }
+    setComponent(instance);
   }, [instance]);
 
   return component && (
@@ -150,32 +148,33 @@ const ComponentDetails = ({instance}) => {
         <ComponentDetailDescription {...{component}} />
       </header>
 
-      {component.parameters && (
+      {component.props && (
         <ComponentDetailSection>
           <div className="flex flex-col gap-y-3 mt-4 px-2">
-            {component.parameters.map((param, i) => {
-              const hasTooltip = param.description || param.type;
+            {Object.keys(component.props).map((propName, i) => {
+              const prop = component.props[propName];
+              const hasTooltip = prop.description || prop.type;
 
               return (
                 <div className="px-1" key={i}>
                   <div key={i} className="flex text-sm text-gray-600 gap-x-1">
-                    <div className="flex gap-x-1 cursor-default" data-tip data-for={`param-${param.name}`}>{param.name}
+                    <div className="flex gap-x-1 cursor-default" data-tip data-for={`param-${prop.name}`}>{prop.name}
                       {hasTooltip && (
                         <>
                           <div className="flex items-center w-5 h-5">
                             <InformationCircleIcon className="block w-4 h-4 text-gray-400" />
                           </div>
-                          <ReactTooltip id={`param-${param.name}`} place="left" effect="solid">
+                          <ReactTooltip id={`param-${prop.name}`} place="left" effect="solid">
                             <div className="text-gray-300">
-                              <p className="text-sm">{param.description}</p>
-                              {param.type && <div className="mt-1 font-mono text-xs rounded-sm text-blue-400">{param.type}</div>}
+                              <p className="text-sm">{prop.description}</p>
+                              {prop.type && <div className="mt-1 font-mono text-xs rounded-sm text-blue-400">{prop.type}</div>}
                             </div>
                           </ReactTooltip>
                         </>
                       )}
                     </div>
                   </div>
-                  <PropertyValue {...{param}} />
+                  <PropertyValue {...{param:prop}} />
                 </div>
               );
             })}

@@ -10,16 +10,22 @@ class ComponentProps implements JsonSerializable {
 
     private $props;
 
-    public function __construct(array $props = [])
+    public function __construct(array $propTypes = [], array $values = [])
     {
-        $this->props = $props;
+        $this->props = $propTypes;
 
-        foreach ($props as $prop=>$value) {
+        foreach ($propTypes as $key=>$value) {
+            // Convert properties that are not of type ComponentProp
             if (!is_a($value, ComponentProp::class)) {
-                $p = $this->props[$prop] = new ComponentProp();
+                $p = $this->props[$key] = new ComponentProp();
+                $p->name($key);
                 $p->set($value);
             }
+
+            $this->props[$key]->name($key);
         }
+
+        $this->mergeValues($values);
     }
 
     public function __get(string $name)

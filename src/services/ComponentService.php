@@ -5,6 +5,8 @@ namespace fse\stackr\services;
 use Craft;
 
 use fse\stackr\Stackr;
+use fse\stackr\components\Component;
+use fse\stackr\components\ComponentProps;
 use fse\stackr\components\ComponentSchema;
 
 /**
@@ -23,12 +25,24 @@ class ComponentService {
      */
     public $instances;
 
+    public static $renderedInstances = [];
+
     /**
      *
      */
     public function __construct()
     {
         $this->instances = [];
+    }
+
+    /**
+     * ...
+     */
+    public static function make(string $name, string $template, string $instanceId, ComponentProps $props)
+    {
+        $component = new Component($name, $template, $instanceId, $props);
+        self::$renderedInstances[$instanceId] = $component;
+        return $component;
     }
 
     /**
@@ -53,14 +67,24 @@ class ComponentService {
     /**
      * Renders the specified component with the provided arguments.
      */
-    public function renderComponent(string $component, array $arguments = []): string
+    public function renderComponent(string $file, array $args = []): string
     {
-        $template = self::$COMPONENT_PATH . '/' . $component;
-        $output = Craft::$app->getView()->renderTemplate($template, $arguments);
+
+        // Q. Why not make the component and register it here?
+        // A. Because you need TWig to compile the definition. duh!
+
+        $template = self::$COMPONENT_PATH . '/' . $file;
+        $instanceId = md5(count($this->instances));
+
+        $args['stackr_comp_name'] = $file;
+        $args['stackr_comp_file'] = $file;
+        $args['stackr_comp_instance_id'] = $instanceId;
+
+        $output = Craft::$app->getView()->renderTemplate($template, $args);
 
         // Find the first HTML element and append the data attribute
         if (Craft::$app->getConfig()->general->devMode) {
-            return $this->appendDebugInfoToComponentString($output, $component, $arguments);
+            return $this->appendDebugInfoToComponentString($instanceId, $output, $file, $args);
         } else {
             return $output;
         }
@@ -73,13 +97,12 @@ class ComponentService {
      * Note: Components that do not have a first HTML element will display
      * incorrectly when using the Stackr Inspector.
      */
-    public function appendDebugInfoToComponentString(string $html, string $component, array $arguments = [])
+    public function appendDebugInfoToComponentString(string $instanceId, string $html, string $component, array $arguments = [])
     {
-        $instanceId = md5(count($this->instances));
-
         // Store the component's instance information
         $this->instances[$instanceId] = [
             'component' => $component,
+            'schema' => $component,
             'arguments' => $arguments,
         ];
 

@@ -13,14 +13,12 @@ class ComponentDefinitionNode extends TwigNode
 {
 	protected $parser;
 
-	public function __construct(TwigNode $body, TwigExpression $defaultValueNodes = null, int $line, string $tag = null)
+	public function __construct(TwigNode $body, TwigExpression $props = null, int $line, string $tag = null)
 	{
-		$nodes = [
-			'body' => $body,
-		];
+		$nodes = ['body' => $body];
 
-		if (!is_null($defaultValueNodes)) {
-            $nodes['defaultValues'] = $defaultValueNodes;
+		if (!is_null($props)) {
+            $nodes['props'] = $props;
         }
 
 		parent::__construct($nodes, [], $line, $tag);
@@ -28,16 +26,28 @@ class ComponentDefinitionNode extends TwigNode
 
 	public function compile(TwigCompiler $compiler)
 	{
-		// TODO: Get Schema....
 		$compiler->addDebugInfo($this);
 
-		if ($this->hasNode('defaultValues')) {
-			$compiler->write('$defaultValues = ')->subcompile($this->getNode('defaultValues'))->raw(";\n");
-			$compiler->write('$props = new fse\stackr\components\ComponentProps($defaultValues)')->raw(";\n");
-			$compiler->write('$props->mergeValues($context)')->raw(";\n");
-			$compiler->write('$context["props"] = $props')->raw(";\n");
-			$compiler->write('$context = array_merge($defaultValues, $context);')->raw(";\n");
+		if ($this->hasNode('props')) {
+			$compiler->write('$propsObj = ')->subcompile($this->getNode('props'))->raw(";\n");
+			$compiler->write('$props = new fse\stackr\components\ComponentProps($propsObj, $context)')->raw(";\n");
+		} else {
+			$compiler->write('$props = new fse\stackr\components\ComponentProps()')->raw(";\n");
 		}
+
+		// Create the component
+		$compiler->write('$stackrComponent = fse\stackr\services\ComponentService::make(
+			$context["stackr_comp_name"],
+			$context["stackr_comp_file"],
+			$context["stackr_comp_instance_id"],
+			$props
+		)')->raw(";\n");
+
+		// Populate the context with the defined props (includes default props).
+		$compiler->write('$context = array_merge($props->getValues(), $context);')->raw(";\n");
+
+		// Provide helper var for accessing the component's ComponentProps
+		$compiler->write('$context["props"] = $props')->raw(";\n");
 
 		$compiler->subcompile($this->getNode('body'));
 	}

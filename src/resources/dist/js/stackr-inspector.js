@@ -268,6 +268,7 @@ var isEmptyValue = function isEmptyValue(param) {
 var PropertyValue = function PropertyValue(_ref3) {
   var param = _ref3.param;
   var val = null;
+  console.log(param);
 
   if (isNullValue(param)) {
     val = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
@@ -393,13 +394,7 @@ var ComponentDetails = function ComponentDetails(_ref6) {
     setIsScrolled(containerRef.current.scrollTop > 8);
   });
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    if (instance) {
-      (0,_fetchComponentSchema__WEBPACK_IMPORTED_MODULE_2__.fetchComponentSchema)(instance).then(function (data) {
-        return setComponent(data);
-      });
-    } else {
-      setComponent(null);
-    }
+    setComponent(instance);
   }, [instance]);
   return component && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     ref: containerRef,
@@ -444,11 +439,12 @@ var ComponentDetails = function ComponentDetails(_ref6) {
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ComponentDetailDescription, {
         component: component
       })]
-    }), component.parameters && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ComponentDetailSection, {
+    }), component.props && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ComponentDetailSection, {
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
         className: "flex flex-col gap-y-3 mt-4 px-2",
-        children: component.parameters.map(function (param, i) {
-          var hasTooltip = param.description || param.type;
+        children: Object.keys(component.props).map(function (propName, i) {
+          var prop = component.props[propName];
+          var hasTooltip = prop.description || prop.type;
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "px-1",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
@@ -456,32 +452,32 @@ var ComponentDetails = function ComponentDetails(_ref6) {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
                 className: "flex gap-x-1 cursor-default",
                 "data-tip": true,
-                "data-for": "param-".concat(param.name),
-                children: [param.name, hasTooltip && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
+                "data-for": "param-".concat(prop.name),
+                children: [prop.name, hasTooltip && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                     className: "flex items-center w-5 h-5",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_heroicons_react_solid__WEBPACK_IMPORTED_MODULE_0__.InformationCircleIcon, {
                       className: "block w-4 h-4 text-gray-400"
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_tooltip__WEBPACK_IMPORTED_MODULE_4__["default"], {
-                    id: "param-".concat(param.name),
+                    id: "param-".concat(prop.name),
                     place: "left",
                     effect: "solid",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
                       className: "text-gray-300",
                       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
                         className: "text-sm",
-                        children: param.description
-                      }), param.type && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                        children: prop.description
+                      }), prop.type && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                         className: "mt-1 font-mono text-xs rounded-sm text-blue-400",
-                        children: param.type
+                        children: prop.type
                       })]
                     })
                   })]
                 })]
               })
             }, i), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(PropertyValue, {
-              param: param
+              param: prop
             })]
           }, i);
         })
@@ -585,13 +581,13 @@ var ComponentListItem = function ComponentListItem(_ref) {
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         className: "text-xs truncate",
-        children: instance.component
+        children: instance.name
       })]
     }, instance.id), children.map(function (child) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(ComponentListItem, {
         instance: child,
         allInstances: allInstances
-      }, child.id);
+      }, child.instanceId);
     })]
   });
 };
@@ -638,7 +634,7 @@ var ComponentsList = function ComponentsList() {
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(ComponentListItem, {
             instance: instance,
             allInstances: instances
-          }, instance.id);
+          }, instance.instanceId);
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "px-4 py-2 text-xs text-gray-400 justify-self-end",
@@ -691,6 +687,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var defaultState = {
   curInstance: null,
   setCurInstance: null,
@@ -715,14 +712,21 @@ var Inspector = function Inspector() {
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(InspectorContext.Provider, {
     value: state,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-      "class": "w-full h-16 border-2 border-green-500",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Preview__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("iframe", {
-          src: "/admin/stackr/examples?c=ui/button",
-          "class": "w-full h-full"
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      className: "fixed top-0 left-0 w-screen h-screen bg-gray-700",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        className: "absolute top-0 w-5/6 h-full",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Preview__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_StackrPage__WEBPACK_IMPORTED_MODULE_4__.StackrPage, {
+            url: url
+          })
         })
-      })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+        className: "absolute top-0 right-0 w-1/6 h-full",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_ComponentsList__WEBPACK_IMPORTED_MODULE_2__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_ComponentDetails__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          instance: curInstance
+        })]
+      })]
     })
   });
 };

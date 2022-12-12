@@ -19,12 +19,12 @@ const Inspector = () => {
 
   return (
     <InspectorContext.Provider value={state}>
-      <div class="w-full h-16 border-2 border-green-500">
+      {/* <div class="w-full h-16 border-2 border-green-500">
         <Preview>
-          <iframe src="/admin/stackr/examples?c=ui/button" class="w-full h-full" />
+          <iframe src="/" class="w-full h-full" />
         </Preview>
-      </div>
-      {/* <div className="fixed top-0 left-0 w-screen h-screen bg-gray-700">
+      </div> */}
+      <div className="fixed top-0 left-0 w-screen h-screen bg-gray-700">
         <div className="absolute top-0 w-5/6 h-full">
           <Preview>
             <StackrPage {...{url}} />
@@ -34,7 +34,7 @@ const Inspector = () => {
           <ComponentsList />
           <ComponentDetails instance={curInstance} />
         </div>
-      </div> */}
+      </div>
     </InspectorContext.Provider>
   );
 }

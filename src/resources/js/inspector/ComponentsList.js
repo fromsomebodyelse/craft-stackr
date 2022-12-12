@@ -33,11 +33,11 @@ const ComponentListItem = ({instance, allInstances}) => {
         <div className="flex-shrink-0 w-5 h-5">
           <img src="https://timber.fsedev/block-article-list.png" className="h-auto w-full rounded-sm" />
         </div>
-        <div className="text-xs truncate">{instance.component}</div>
+        <div className="text-xs truncate">{instance.name}</div>
       </div>
 
       {children.map(child =>
-        <ComponentListItem key={child.id} instance={child} allInstances={allInstances} />
+        <ComponentListItem key={child.instanceId} instance={child} allInstances={allInstances} />
       )}
     </React.Fragment>
   );
@@ -65,7 +65,7 @@ const ComponentsList = () => {
       <div className="flex flex-col justify-between h-full pt-4">
         {/* List */}
         <div className="flex flex-col gap-y-2 mb-16 px-6">
-          { instances.filter(instance => instance.depth === 0).map(instance => <ComponentListItem key={instance.id} instance={instance} allInstances={instances} />) }
+          { instances.filter(instance => instance.depth === 0).map(instance => <ComponentListItem key={instance.instanceId} instance={instance} allInstances={instances} />) }
         </div>
 
         {/* Copyright */}

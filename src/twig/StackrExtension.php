@@ -3,6 +3,7 @@
 namespace fse\stackr\twig;
 
 use fse\stackr\Stackr;
+use fse\stackr\services\ComponentService;
 use fse\stackr\twig\tokenparser\StackrComponentTokenParser;
 
 use Craft;
@@ -42,13 +43,9 @@ class StackrExtension extends AbstractExtension
             return '';
         }
 
-        $debugJson = json_encode(
-            Stackr::$plugin->components->getInstances(),
-        );
-
         $html = '';
         $html .= '<script type="text/javascript">';
-        $html .= '  window.stackrComponents = ' . $debugJson . ';';
+        $html .= '  window.stackrComponents = ' . json_encode(ComponentService::$renderedInstances) . ';';
         $html .= '</script>';
         $html .= '<link href="' . Craft::$app->getAssetManager()->getPublishedUrl('@fse/stackr/resources/dist/css/host.css', true) . '" rel="stylesheet">';
         $html .= '<script src="' . Craft::$app->getAssetManager()->getPublishedUrl('@fse/stackr/resources/dist/js/host.js', true) . '"></script>';
