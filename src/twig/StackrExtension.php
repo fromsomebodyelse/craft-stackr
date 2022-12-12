@@ -43,7 +43,7 @@ class StackrExtension extends AbstractExtension
             return '';
         }
 
-        $html = '';
+        $html = '<a href="/admin/stackr?url=' . Craft::$app->request->getUrl() .'" style="bg-color: red; padding: 10px; position: fixed; bottom: 0; right: 0; z-index: 999">#</a>';
         $html .= '<script type="text/javascript">';
         $html .= '  window.stackrComponents = ' . json_encode(ComponentService::$renderedInstances) . ';';
         $html .= '</script>';
