@@ -19,7 +19,7 @@ const Inspector = () => {
 
   return (
     <InspectorContext.Provider value={state}>
-      {/* <div class="w-full h-16 border-2 border-green-500">
+      {/* WIP <div class="w-full h-16 border-2 border-green-500">
         <Preview>
           <iframe src="/" class="w-full h-full" />
         </Preview>

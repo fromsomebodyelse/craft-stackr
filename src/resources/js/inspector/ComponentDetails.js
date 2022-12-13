@@ -56,10 +56,9 @@ const ComponentThumb = () => {
   return  (
     <div className="border border-gray-400 rounded-md overflow-hidden">
       <div className="w-full aspect-square bg-white text-gray-400">
-        {/* <svg className="h-auto w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="h-auto w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-        </svg> */}
-        <img src="https://timber.fsedev/block-article-list.png" className="h-auto w-full" />
+        </svg>
       </div>
     </div>
   );
@@ -138,14 +137,14 @@ const ComponentDetails = ({instance}) => {
           </button>
         </div>
         <div className="flex items-end">
-          <div className="w-full max-w-[60px]">
+          {/* WIP <div className="w-full max-w-[60px]">
             <ComponentThumb {...{component}} />
-          </div>
-          <div className="mt-2 ml-4">
+          </div> */}
+          <div className="mt-2">
             <p className="text-xl leading-6">{component.name}</p>
           </div>
         </div>
-        <ComponentDetailDescription {...{component}} />
+        {/* WIP <ComponentDetailDescription {...{component}} /> */}
       </header>
 
       {component.props && (
