@@ -3,7 +3,6 @@
 namespace fse\stackr\services;
 
 use fse\stackr\Stackr;
-use fse\stackr\components\ComponentSchema;
 use fse\stackr\components\ComponentProp;
 use fse\stackr\components\PropArray;
 use fse\stackr\components\PropArrayOf;
@@ -56,14 +55,4 @@ class SchemaService {
     {
         return (new PropString())->defaultValue($default);
     }
-
-    public function parseSchema(string $component):ComponentSchema
-	{
-        // TODO: Handle missing files.
-        $file = Stackr::$plugin->components->getFilePath($component);
-        $str = file_get_contents($file);
-		$attributes = $this->parser->parse($str)->getYAML();
-
-		return new ComponentSchema($component, $attributes);
-	}
 }

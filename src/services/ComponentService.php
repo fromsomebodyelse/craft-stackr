@@ -7,7 +7,6 @@ use Craft;
 use fse\stackr\Stackr;
 use fse\stackr\components\Component;
 use fse\stackr\components\ComponentProps;
-use fse\stackr\components\ComponentSchema;
 
 /**
  * Service for rendering and components and maintaining a list of all

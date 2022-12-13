@@ -2,7 +2,6 @@
 namespace fse\stackr\twig\node;
 
 use Craft;
-use fse\stackr\components\ComponentSchema;
 use fse\stackr\Stackr;
 use Twig\Compiler as TwigCompiler;
 use Twig\Node\Node as TwigNode;
