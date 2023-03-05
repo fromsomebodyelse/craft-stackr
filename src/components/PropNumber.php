@@ -25,6 +25,10 @@ class PropNumber extends ComponentProp {
 
     public function test($value):bool
     {
+        if (is_null($value) && !$this->nullable) {
+            throw new Exception(sprintf('Stackr: "%s" value cannot be null, "%s"', $this->name, get_class($value)));
+        }
+
         return is_numeric($value);
     }
 

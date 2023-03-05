@@ -11,12 +11,14 @@ class ComponentProp implements JsonSerializable {
     protected $description;
     protected $default;
     protected $required;
+    protected $nullable;
     protected $value;
 
     public function __construct($type = 'Any')
     {
         $this->type = $type;
         $this->required = false;
+        $this->nullable = false;
     }
 
     public function defaultValue(mixed $value):self
@@ -46,6 +48,17 @@ class ComponentProp implements JsonSerializable {
     {
         $this->required = true;
         return $this;
+    }
+
+    public function nullable():self
+    {
+        $this->nullable = true;
+        return $this;
+    }
+
+    public function isNullable():bool
+    {
+        return $this->nullable;
     }
 
     public function isRequired():bool

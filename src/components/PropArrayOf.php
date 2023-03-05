@@ -30,6 +30,10 @@ class PropArrayOf extends ComponentProp {
 
     public function test($array):bool
     {
+        if (is_null($array) && !$this->nullable) {
+            throw new Exception(sprintf('Stackr: "%s" array cannot be null, "%s"', $this->name, get_class($array)));
+        }
+
         if (!is_array($array)) {
             throw new Exception('Stackr: ArrayOf requires the value be an array.');
         }

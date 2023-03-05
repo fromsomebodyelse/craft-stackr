@@ -16,6 +16,14 @@ class PropString extends ComponentProp {
 
     public function test($value):bool
     {
+        if (is_null($value)) {
+            if (!$this->nullable) {
+                throw new Exception(sprintf('Stackr: "%s" value cannot be null.', $this->name ?? $this->type));
+            }
+
+            return true;
+        }
+
         $isString = is_string($value) || $value instanceof Stringable;
 
         if (!$isString) {

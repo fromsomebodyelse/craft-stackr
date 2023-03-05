@@ -21,6 +21,11 @@ class SchemaService {
         $this->parser = new Parser(null, null, '{#---', '---#}');
     }
 
+    public function any($default = null)
+    {
+        return (new ComponentProp())->defaultValue($default);
+    }
+
     public function array($default = [])
     {
         return (new PropArray())->defaultValue($default);

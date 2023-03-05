@@ -33,6 +33,10 @@ class PropEnum extends ComponentProp {
 
     public function test($value):bool
     {
+        if (is_null($value) && !$this->nullable) {
+            throw new Exception(sprintf('Stackr: "%s" value cannot be null, "%s"', $this->name, get_class($value)));
+        }
+
         if (!in_array($value, $this->list)) {
             throw new Exception(sprintf('Stackr: value "%s" not present in list "[%s]"', $value, implode(',', $this->list)));
         }

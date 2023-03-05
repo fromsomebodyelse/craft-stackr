@@ -17,6 +17,14 @@ class PropShape extends ComponentProp {
 
     public function test($value):bool
     {
+        if (is_null($value) && !$this->nullable) {
+            throw new Exception(sprintf('Stackr: "%s" value cannot be null, "%s"', $this->name, get_class($value)));
+        }
+
+        if (is_null($value)) {
+            return true;
+        }
+
         if (!is_array($value)) {
             throw new Exception(sprintf('Stackr: PropShape expecting `array` but found `%s`', getType($value)));
         }
@@ -26,7 +34,14 @@ class PropShape extends ComponentProp {
                 throw new Exception(sprintf('Stackr: %s is required', $prop));
             }
 
-            $shapeType->test($value[$prop]);
+            if (!$shapeType->isNullable() && is_null($value)) {
+                throw new Exception(sprintf('Stackr: %s can not be null.', $prop));
+            }
+
+            // only test if it's been set.
+            if (array_key_exists($prop, $value)) {
+                $shapeType->test($value[$prop]);
+            }
         }
 
         return true;
