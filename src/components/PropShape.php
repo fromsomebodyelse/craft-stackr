@@ -25,7 +25,11 @@ class PropShape extends ComponentProp {
             return true;
         }
 
-        if (!is_array($value)) {
+        if (is_array($value)) {
+
+        }
+
+        if (!is_array($value) and !is_object($value)) {
             throw new Exception(sprintf('Stackr: PropShape expecting `array` but found `%s`', getType($value)));
         }
 
@@ -38,9 +42,16 @@ class PropShape extends ComponentProp {
                 throw new Exception(sprintf('Stackr: %s can not be null.', $prop));
             }
 
-            // only test if it's been set.
-            if (array_key_exists($prop, $value)) {
-                $shapeType->test($value[$prop]);
+            if (is_Array($value)) {
+                // only test if it's been set.
+                if (array_key_exists($prop, $value)) {
+                    $shapeType->test($value[$prop]);
+                }
+            } else {
+
+                if (property_exists($value, $prop)) {
+                    $shapeType->test($value->{$prop});
+                }
             }
         }
 
