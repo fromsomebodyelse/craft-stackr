@@ -1,0 +1,13 @@
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="/static/styles/app.css" />
+</head>
+<body>
+    {% do view.setTemplateMode('site') %}
+    {{ stackr(component) }}
+    {% do view.setTemplateMode('cp') %}
+    <script>
+        var schema = {{ schema.toArray()|json_encode|raw }};
+    </script>
+</body>

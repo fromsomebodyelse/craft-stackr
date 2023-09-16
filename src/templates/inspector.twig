@@ -1,0 +1,15 @@
+<html>
+<head>
+    <title>Stackr Inspector</title>
+    <link rel="stylesheet" href="{{ files['stackr-inspector.css'] }}" type="text/css" media="all">
+</head>
+<body>
+    <div id="stackr-root"></div>
+    <script type="text/javascript">
+        window.inspectUrl = '{{ siteUrl('/') }}';
+        window.csrfTokenName = '{{ token.name }}';
+        window.csrfTokenValue = '{{ token.value }}';
+    </script>
+
+    <script type="text/javascript" src="{{ files['stackr-inspector.js'] }}"></script>
+</body>

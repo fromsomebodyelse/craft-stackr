@@ -1,0 +1,40 @@
+{
+    "name": "fse/craft-stackr",
+    "description": "Stackr plugin for Craft CMS",
+    "type": "craft-plugin",
+    "keywords": ["craft", "stackr"],
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "FSE",
+        "homepage": "https://fromsomebodyelse.com"
+      }
+    ],
+    "support": {
+      "email": "justen@fromsomebodyelse.com",
+      "issues": "https://github.com/fromsomebodyelse/craft-stackr/issues?state=open",
+      "source": "https://github.com/fromsomebodyelse/craft-stackr/",
+      "docs": "https://github.com/fromsomebodyelse/craft-stackr/blob/main/README.md"
+    },
+    "require": {
+      "craftcms/cms": "^4.2.0",
+      "mnapoli/front-yaml": "^2.0",
+        "erusev/parsedown": "^1.7"
+    },
+    "autoload": {
+      "psr-4": {
+        "fse\\stackr\\": "src/"
+      }
+    },
+    "extra": {
+      "name": "Stackr",
+      "handle": "stackr",
+      "class": "fse\\stackr\\Stackr"
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
+    }
+}
